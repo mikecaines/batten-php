@@ -11,11 +11,11 @@ on which you can build your own structure.
 
 ## More Information
 
-* About
-* Quick Start
-* Wiki
-* [Source](https://github.com/mikecaines/batten-php/)
+* [About](https://github.com/mikecaines/batten-php/wiki/About)
+* [Quick Start](https://github.com/mikecaines/batten-php/wiki/Quick-Start)
+* [Wiki](https://github.com/mikecaines/batten-php/wiki)
+* [Source](https://github.com/mikecaines/batten-php)
 
 ## Related Projects
 
-* [batten-stub](https://github.com/mikecaines/batten-stub/)
+* [batten-stub](https://github.com/mikecaines/batten-stub)
