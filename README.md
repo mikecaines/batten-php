@@ -9,6 +9,8 @@ NOTE: This package not usually used directly. It is instead used as part of a hi
 [batten-stub](https://github.com/mikecaines/batten-stub/). The batten package includes only the bare essentials
 on which you can build your own structure.
 
+This package is currently in *alpha*.
+
 ## More Information
 
 * [About](https://github.com/mikecaines/batten-php/wiki/About)

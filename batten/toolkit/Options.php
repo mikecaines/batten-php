@@ -1,7 +1,9 @@
 <?php
 namespace batten;
 
-class Options {
+include_once \batten\OKKIT_PKG_FILE_PATH . '/toolkit/ok_ToArrayInterface.php';
+
+class Options implements \ok_ToArrayInterface {
 	private $data = [];
 
 	public function set($aCode, $aValue) {
@@ -22,5 +24,9 @@ class Options {
 		}
 
 		return $this->data[$aCode];
+	}
+
+	public function toArray() {
+		return $this->data;
 	}
 }

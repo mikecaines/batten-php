@@ -29,6 +29,13 @@ class ViewPlugins {
 		return $plugin;
 	}
 
+	public function get($aPluginCode) {
+		return array_key_exists($aPluginCode, $this->items)
+			? $this->items[$aPluginCode]
+			: null
+		;
+	}
+
 	public function getRegisteredCodes() {
 		return array_keys($this->items);
 	}
