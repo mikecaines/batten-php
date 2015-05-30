@@ -29,6 +29,10 @@ class ControllerPlugins {
 		return $plugin;
 	}
 
+	/**
+	 * @param string $aPluginCode
+	 * @return ControllerPlugin|null
+	 */
 	public function get($aPluginCode) {
 		return array_key_exists($aPluginCode, $this->items)
 			? $this->items[$aPluginCode]
