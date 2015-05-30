@@ -79,7 +79,13 @@ abstract class View implements ViewInterface {
 		return $this->controller;
 	}
 
-	abstract public function render();
+	public function render() {
+		if (Reflector::inSurfaceMethodCall()) {
+			$this->dispatchEvent(new Event('render', [
+				'target' => $this,
+			]));
+		}
+	}
 
 	public function init() {
 		//this method provides a hook to resolve plugins, options, etc.
