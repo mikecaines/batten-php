@@ -25,5 +25,7 @@ interface ViewInterface {
 
 	public function render();
 
+	public function addEventListener($aEventType, $aListener);
+
 	public function init();
 }
