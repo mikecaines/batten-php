@@ -22,7 +22,7 @@ if (!is_dir(\batten\BATTEN_PKG_FILE_PATH)) {
 define('batten\BATTEN_NS_FILE_PATH', realpath(__DIR__ . '/../'));
 
 //setup ok-kit paths (dependency)
-if (!defined('batten\OKKIT_PKG_FILE_PATH')) define('batten\OKKIT_PKG_FILE_PATH', realpath(__DIR__ . '/../../_external/ok-kit-php'));
+if (!defined('batten\OKKIT_PKG_FILE_PATH')) define('batten\OKKIT_PKG_FILE_PATH', realpath(__DIR__ . '/../../../ok-kit-php'));
 if (!is_dir(\batten\OKKIT_PKG_FILE_PATH)) {
 	error_log("ERROR: \\batten\\OKKIT_PKG_FILE_PATH is invalid: '" . print_r(\batten\OKKIT_PKG_FILE_PATH, true) . "'.");
 	die(1);
