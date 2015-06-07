@@ -349,7 +349,18 @@ abstract class Controller implements ControllerInterface {
 		}
 		while ($keepRouting);
 
+		if ($tempController) {
+			$tempController->markResolved();
+		}
+
 		return $tempController;
+	}
+
+	/**
+	 * Called if the controller is resolved to the final controler in resolveController().
+	 */
+	public function markResolved() {
+
 	}
 
 	public function processRoute($aInfo) {
