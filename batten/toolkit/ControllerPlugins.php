@@ -20,7 +20,7 @@ class ControllerPlugins {
 				/** @noinspection PhpIncludeInspection */
 				include_once $component['includeFilePath'];
 
-				$plugin = new $component['className']($this->controller);
+				$plugin = new $component['className']($this->controller, $aPluginCode);
 			}
 
 			$this->items[$aPluginCode] = $plugin;
@@ -37,7 +37,7 @@ class ControllerPlugins {
 		return array_key_exists($aPluginCode, $this->items)
 			? $this->items[$aPluginCode]
 			: null
-			;
+		;
 	}
 
 	public function getRegisteredCodes() {

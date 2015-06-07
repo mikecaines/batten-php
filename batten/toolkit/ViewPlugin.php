@@ -3,6 +3,7 @@ namespace batten;
 
 abstract class ViewPlugin {
 	private $view;
+	private $code;
 
 	/**
 	 * @return \batten\View
@@ -11,7 +12,12 @@ abstract class ViewPlugin {
 		return $this->view;
 	}
 
-	public function __construct(ViewInterface $aView) {
+	public function getCode() {
+		return $this->code;
+	}
+
+	public function __construct(ViewInterface $aView, $aCode) {
 		$this->view = $aView;
+		$this->code = (string)$aCode;
 	}
 }

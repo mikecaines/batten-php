@@ -20,7 +20,7 @@ class ViewPlugins {
 				/** @noinspection PhpIncludeInspection */
 				include_once $component['includeFilePath'];
 
-				$plugin = new $component['className']($this->view);
+				$plugin = new $component['className']($this->view, $aPluginCode);
 			}
 
 			$this->items[$aPluginCode] = $plugin;

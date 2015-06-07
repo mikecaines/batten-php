@@ -3,6 +3,7 @@ namespace batten;
 
 abstract class ControllerPlugin {
 	private $controller;
+	private $code;
 
 	/**
 	 * @return ControllerInterface
@@ -11,7 +12,19 @@ abstract class ControllerPlugin {
 		return $this->controller;
 	}
 
-	public function __construct(ControllerInterface $aController) {
+	public function getCode() {
+		return $this->code;
+	}
+
+	/**
+	 * @return ControllerPluginProxy|null
+	 */
+	public function getViewProxy() {
+		return null;
+	}
+
+	public function __construct(ControllerInterface $aController, $aCode) {
 		$this->controller = $aController;
+		$this->code = (string)$aCode;
 	}
 }
