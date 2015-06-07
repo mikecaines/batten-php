@@ -40,6 +40,8 @@ interface ControllerInterface {
 	 */
 	public function resolveController($aInfo, $aModelData = null);
 
+	public function markResolved();
+
 	public function processRoute($aInfo);
 
 	public function go();
