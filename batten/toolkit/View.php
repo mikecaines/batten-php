@@ -14,12 +14,25 @@ abstract class View implements ViewInterface {
 	private $input;
 	private $controller;
 	private $plugins;
+	private $options;
 
 	protected $type;
 
 	protected function resolvePlugins() {
 		foreach ($this->getController()->getPlugins()->getRegisteredCodes() as $registeredCode) {
 			$this->getPlugins()->register($registeredCode);
+		}
+	}
+
+	protected function resolveOptions() {
+		if (Reflector::inSurfaceMethodCall()) {
+			$this->dispatchEvent(
+				new Event('app-resolve-options', ['target' => $this])
+			);
+
+			$this->dispatchEvent(
+				new Event('resolve-options', ['target' => $this])
+			);
 		}
 	}
 
@@ -33,6 +46,15 @@ abstract class View implements ViewInterface {
 
 	public function getType() {
 		return $this->type;
+	}
+
+	public function getOptions() {
+		if (!$this->options) {
+			include_once __DIR__ . '/Options.php';
+			$this->options = new Options();
+		}
+
+		return $this->options;
 	}
 
 	public function getPlugins() {
@@ -91,6 +113,7 @@ abstract class View implements ViewInterface {
 		//this method provides a hook to resolve plugins, options, etc.
 
 		$this->resolvePlugins();
+		$this->resolveOptions();
 		$this->resolveHintedInput();
 	}
 
