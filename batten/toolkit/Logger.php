@@ -21,10 +21,7 @@ class Logger implements LoggerInterface {
 		$output .= ' [type=' . $typeName . ']';
 
 		$output .= ': ' . $aMessage;
-
-		if ($aContext !== null) {
-			$output .= ' Details: ' . ok_varInfo($aContext);
-		}
+		$output .= ' Details: ' . ok_varInfo($aContext);
 
 		error_log($output);
 	}
