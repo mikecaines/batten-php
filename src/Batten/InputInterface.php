@@ -1,7 +1,9 @@
 <?php
-namespace batten;
+namespace Batten;
 
-interface InputInterface extends \ok_ToArrayInterface {
+use Ok\ToArrayInterface;
+
+interface InputInterface extends ToArrayInterface {
 	public function importFromGlobals();
 
 	public function merge($aData);

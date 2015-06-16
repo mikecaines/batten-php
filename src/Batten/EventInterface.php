@@ -1,5 +1,5 @@
 <?php
-namespace batten;
+namespace Batten;
 
 interface EventInterface {
 	public function getType();

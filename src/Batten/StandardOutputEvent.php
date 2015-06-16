@@ -1,7 +1,5 @@
 <?php
-namespace batten;
-
-include_once __DIR__ . '/Event.php';
+namespace Batten;
 
 class StandardOutputEvent extends Event {
 	private $output = '';

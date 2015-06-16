@@ -1,9 +1,8 @@
 <?php
-namespace batten;
+namespace Batten;
 
 use app\Environment as Env;
-
-include_once __DIR__ . '/LoggerInterface.php';
+use Ok\MiscUtils;
 
 class Logger implements LoggerInterface {
 	protected function processEntry($aMessage, $aContext = null, $aType) {
@@ -12,16 +11,16 @@ class Logger implements LoggerInterface {
 		$output .= ' [date=' . date('c') . ']';
 
 		switch ($aType) {
-			case \batten\LOG_LEVEL_INFO: $typeName = 'INFO'; break;
-			case \batten\LOG_LEVEL_WARNING: $typeName = 'WARNING'; break;
-			case \batten\LOG_LEVEL_ERROR: $typeName = 'ERROR'; break;
-			case \batten\LOG_LEVEL_DEBUG: $typeName = 'DEBUG'; break;
+			case \Batten\LOG_LEVEL_INFO: $typeName = 'INFO'; break;
+			case \Batten\LOG_LEVEL_WARNING: $typeName = 'WARNING'; break;
+			case \Batten\LOG_LEVEL_ERROR: $typeName = 'ERROR'; break;
+			case \Batten\LOG_LEVEL_DEBUG: $typeName = 'DEBUG'; break;
 			default: $typeName = 'OTHER';
 		}
 		$output .= ' [type=' . $typeName . ']';
 
 		$output .= ': ' . $aMessage;
-		$output .= ' Details: ' . ok_varInfo($aContext);
+		$output .= ' Details: ' . MiscUtils::varInfo($aContext);
 
 		error_log($output);
 	}

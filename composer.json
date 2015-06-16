@@ -1,0 +1,9 @@
+{
+  "name": "mikecaines/batten-php",
+
+  "autoload": {
+    "psr-4": {
+      "Batten\\": "src/Batten"
+    }
+  }
+}

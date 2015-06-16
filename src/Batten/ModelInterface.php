@@ -1,7 +1,9 @@
 <?php
-namespace batten;
+namespace Batten;
 
-interface ModelInterface extends \ok_ToArrayInterface {
+use Ok\ToArrayInterface;
+
+interface ModelInterface extends ToArrayInterface {
 	public function getCode();
 	public function set($aPath, $aObject);
 	public function merge($aData);

@@ -1,7 +1,5 @@
 <?php
-namespace batten;
-
-include_once __DIR__ . '/EventInterface.php';
+namespace Batten;
 
 class Event implements EventInterface {
 	private $type;

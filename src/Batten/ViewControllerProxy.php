@@ -1,7 +1,5 @@
 <?php
-namespace batten;
-
-include_once __DIR__ . '/ViewControllerProxyInterface.php';
+namespace Batten;
 
 class ViewControllerProxy implements ViewControllerProxyInterface {
 	private $controller;
@@ -25,7 +23,6 @@ class ViewControllerProxy implements ViewControllerProxyInterface {
 
 	public function getPlugins() {
 		if (!$this->plugins) {
-			include_once __DIR__ . '/ControllerPluginsProxy.php';
 			$this->plugins = new ControllerPluginsProxy($this->controller->getPlugins());
 		}
 

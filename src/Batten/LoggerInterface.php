@@ -1,5 +1,5 @@
 <?php
-namespace batten;
+namespace Batten;
 
 const LOG_LEVEL_ERROR = 1000;
 const LOG_LEVEL_WARNING = 2000;

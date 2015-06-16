@@ -1,5 +1,5 @@
 <?php
-namespace batten;
+namespace Batten;
 
 trait EventTargetTrait {
 	private $listeners = [];

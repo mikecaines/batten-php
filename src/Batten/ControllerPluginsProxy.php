@@ -1,7 +1,5 @@
 <?php
-namespace batten;
-
-include_once __DIR__ . '/ControllerPlugins.php';
+namespace Batten;
 
 class ControllerPluginsProxy {
 	private $plugins;

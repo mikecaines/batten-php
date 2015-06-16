@@ -1,7 +1,8 @@
 <?php
-namespace batten;
+namespace Batten;
 
 use app\Environment as Env;
+use Ok\StructUtils;
 
 class ClassAutoloader {
 	private $controller;
@@ -14,6 +15,12 @@ class ClassAutoloader {
 			$chain = array_reverse($this->controller->getChain($this->controller->getCode()));
 
 			foreach ($chain as $link) {
+				$link = StructUtils::merge([
+					'namespace' => null,
+					'path' => null,
+					'classPath' => null,
+				], $link);
+
 				if ($link['namespace'] === $namespace) {
 					$tempPath = $link['path'] . $link['classPath'] . DIRECTORY_SEPARATOR . $className . '.php';
 
@@ -21,7 +28,7 @@ class ClassAutoloader {
 						/** @noinspection PhpIncludeInspection */
 						include_once $tempPath;
 
-						if (\batten\DEBUG_CLASS_AUTOLOAD) {
+						if (\Batten\DEBUG_CLASS_AUTOLOAD) {
 							Env::getLogger()->debug('Autoloaded class ' . $aClass . ' from file ' . $tempPath . '.');
 						}
 

@@ -1,10 +1,7 @@
 <?php
-namespace batten;
+namespace Batten;
 
 use app\Environment as Env;
-
-include_once __DIR__ . '/ViewInterface.php';
-include_once __DIR__ . '/EventTargetTrait.php';
 
 abstract class View implements ViewInterface {
 	use EventTargetTrait;
@@ -50,7 +47,6 @@ abstract class View implements ViewInterface {
 
 	public function getOptions() {
 		if (!$this->options) {
-			include_once __DIR__ . '/Options.php';
 			$this->options = new Options();
 		}
 
@@ -59,7 +55,6 @@ abstract class View implements ViewInterface {
 
 	public function getPlugins() {
 		if (!$this->plugins) {
-			include_once __DIR__ . '/ViewPlugins.php';
 			$this->plugins = new ViewPlugins($this);
 		}
 

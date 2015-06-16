@@ -1,9 +1,9 @@
 <?php
-namespace batten;
+namespace Batten;
 
-include_once \batten\OKKIT_PKG_FILE_PATH . '/toolkit/ok_ToArrayInterface.php';
+use Ok\ToArrayInterface;
 
-class Options implements \ok_ToArrayInterface {
+class Options implements ToArrayInterface {
 	private $data = [];
 
 	public function add($aCode, $aValue) {

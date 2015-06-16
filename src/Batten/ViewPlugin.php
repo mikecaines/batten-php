@@ -1,12 +1,12 @@
 <?php
-namespace batten;
+namespace Batten;
 
 abstract class ViewPlugin {
 	private $view;
 	private $code;
 
 	/**
-	 * @return \batten\View
+	 * @return \Batten\View
 	 */
 	public function getView() {
 		return $this->view;

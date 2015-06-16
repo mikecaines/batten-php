@@ -7,5 +7,5 @@
 namespace app {
 	if (true) die();
 
-	abstract class Environment extends \batten\Environment {}
+	abstract class Environment extends \Batten\Environment {}
 }

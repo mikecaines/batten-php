@@ -1,18 +1,16 @@
 <?php
-namespace batten;
+namespace Batten;
 
 use app\Environment as Env;
-
-include_once OKKIT_PKG_FILE_PATH . '/toolkit/ok-lib-misc.php';
-include_once __DIR__ . '/main.php';
-include_once __DIR__ . '/ControllerInterface.php';
-include_once __DIR__ . '/UnresolvedRouteException.php';
-include_once __DIR__ . '/EventTargetTrait.php';
-include_once __DIR__ . '/Reflector.php';
+use ErrorException;
+use Ok\MiscUtils;
+use Ok\StringUtils;
+use Ok\StructUtils;
 
 abstract class Controller implements ControllerInterface {
 	use EventTargetTrait;
 
+	static private $booted = false;
 	static private $bootPath = [];
 	static private $bootLoopError;
 	static private $componentResolver;
@@ -20,15 +18,14 @@ abstract class Controller implements ControllerInterface {
 
 	static protected function getBaseChain() {
 		return $chain = [
-			'batten' => [
-				'namespace' => 'batten',
-				'path' => __DIR__ . '/../../batten',
-				'classPath' => DIRECTORY_SEPARATOR . 'toolkit',
+			__NAMESPACE__ => [
+				'namespace' => __NAMESPACE__,
+				'path' => __DIR__,
 			],
 
 			'app' => [
 				'namespace' => 'app',
-				'path' => APP_BASE_FILE_PATH,
+				'path' => Env::getAppPackageFilePath() . '/app/base',
 				'classPath' => DIRECTORY_SEPARATOR . 'toolkit',
 			],
 		];
@@ -71,7 +68,7 @@ abstract class Controller implements ControllerInterface {
 		if ($aModuleCode != null) {
 			$chain[$aModuleCode] = [
 				'namespace' => 'app',
-				'path' => APP_NS_FILE_PATH . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . strtolower(ok_strCamelToDash($aModuleCode)),
+				'path' => Env::getAppPackageFilePath() . '/app/modules/' . strtolower(StringUtils::camelToDash($aModuleCode)),
 				'classPath' => DIRECTORY_SEPARATOR . 'toolkit',
 				'moduleClassNamePart' => ucfirst($aModuleCode),
 			];
@@ -82,7 +79,6 @@ abstract class Controller implements ControllerInterface {
 
 	static public function getComponentResolver() {
 		if (!self::$componentResolver) {
-			include_once __DIR__ . '/ComponentResolver.php';
 			self::$componentResolver = new ComponentResolver();
 		}
 
@@ -90,16 +86,26 @@ abstract class Controller implements ControllerInterface {
 	}
 
 	static public function boot() {
+		if (self::$booted) {
+			throw new \Exception(
+				__METHOD__ . " can only be called once per request, unlike reboot()."
+			);
+		}
+
+		self::$booted = true;
+
 		if (DEBUG_MEM_USAGE) {
 			Env::getLogger()->debug('mem[boot begin]: ' . memory_get_usage());
 		}
 
 		if (DEBUG_PATHS) {
-			Env::getLogger()->debug('\batten\BATTEN_NS_FILE_PATH: '. \batten\BATTEN_NS_FILE_PATH);
+			Env::getLogger()->debug('App dependencies file path: '. APP_DEPENDENCIES_FILE_PATH);
+			Env::getLogger()->debug('App package file path: '. Env::getAppPackageFilePath());
 		}
 
-		include_once OKKIT_PKG_FILE_PATH . '/toolkit/ok-lib-error.php';
-		set_error_handler('ok_handleErrorAndThrowException');
+		set_error_handler(function ($aNumber, $aMessage, $aFile, $aLine) {
+			throw new ErrorException($aMessage, 0, $aNumber, $aFile, $aLine);
+		});
 
 		$info = [
 			'moduleCode' => '',
@@ -223,7 +229,7 @@ abstract class Controller implements ControllerInterface {
 		do {
 			if ($tempInfo != null) {
 				//normalize the boot info
-				$tempInfo = ok_arrayMergeStruct([
+				$tempInfo = StructUtils::merge([
 					'moduleCode' => '',
 					'nextRoute' => '',
 				], $tempInfo ?: []);
@@ -245,7 +251,7 @@ abstract class Controller implements ControllerInterface {
 
 						//store the infinite loop error (which is used by reboot() )
 						self::$bootLoopError = new \Exception(
-							"Infinite boot loop. Iterations were " . ok_varInfo(array_values(self::$bootPath))
+							"Infinite boot loop. Iterations were " . MiscUtils::varInfo(array_values(self::$bootPath))
 						);
 
 						//append the current iteration to the boot path
@@ -319,7 +325,7 @@ abstract class Controller implements ControllerInterface {
 						$newInfo = $tempController->processRoute($tempInfo);
 
 						if (DEBUG_ROUTING) {
-							Env::getLogger()->debug(get_class($tempController) . ' routed from -> to: ' . ok_varInfo($tempInfo) . ' -> ' . ok_varInfo($newInfo));
+							Env::getLogger()->debug(get_class($tempController) . ' routed from -> to: ' . MiscUtils::varInfo($tempInfo) . ' -> ' . MiscUtils::varInfo($newInfo));
 						}
 
 						$tempInfo = $newInfo;
@@ -357,7 +363,7 @@ abstract class Controller implements ControllerInterface {
 	}
 
 	/**
-	 * Called if the controller is resolved to the final controler in resolveController().
+	 * Called if the controller is resolved to the final controller in resolveController().
 	 */
 	public function markResolved() {
 
@@ -416,7 +422,6 @@ abstract class Controller implements ControllerInterface {
 
 	public function getClassAutoloader() {
 		if (!$this->classAutoloader) {
-			include_once __DIR__ . '/ClassAutoloader.php';
 			$this->classAutoloader = new ClassAutoloader($this);
 		}
 
@@ -537,7 +542,6 @@ abstract class Controller implements ControllerInterface {
 
 	public function getViewProxy() {
 		if (!$this->viewProxy) {
-			include_once __DIR__ . '/ViewControllerProxy.php';
 			$this->viewProxy = new ViewControllerProxy($this);
 		}
 
@@ -550,7 +554,6 @@ abstract class Controller implements ControllerInterface {
 
 	public function getOptions() {
 		if (!$this->options) {
-			include_once __DIR__ . '/Options.php';
 			$this->options = new Options();
 		}
 
@@ -559,7 +562,6 @@ abstract class Controller implements ControllerInterface {
 
 	public function getPlugins() {
 		if (!$this->plugins) {
-			include_once __DIR__ . '/ControllerPlugins.php';
 			$this->plugins = new ControllerPlugins($this);
 		}
 
@@ -570,7 +572,7 @@ abstract class Controller implements ControllerInterface {
 		//this method provides a hook to resolve plugins, options, etc.
 
 		if (!self::$classAutoloaderRegistered) {
-			spl_autoload_register([$this->getClassAutoloader(), 'handleClassAutoload']);
+			spl_autoload_register([$this->getClassAutoloader(), 'handleClassAutoload'], true, false);
 			self::$classAutoloaderRegistered = true;
 		}
 

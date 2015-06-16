@@ -1,10 +1,10 @@
 <?php
-namespace batten;
+namespace Batten;
 
 use app\Environment as Env;
-
-include_once OKKIT_PKG_FILE_PATH . '/toolkit/ok-lib-string.php';
-include_once OKKIT_PKG_FILE_PATH . '/toolkit/ok-lib-struct.php';
+use Ok\MiscUtils;
+use Ok\StringUtils;
+use Ok\StructUtils;
 
 class ComponentResolver {
 	public function resolveComponent($aChain, $aClassNamePart, $aViewTypeCode = null, $aPluginCode = null) {
@@ -14,7 +14,7 @@ class ComponentResolver {
 		$component = null;
 
 		foreach ($chain as $link) {
-			$link = ok_arrayMergeStruct([
+			$link = StructUtils::merge([
 				'namespace' => '\\',
 				'path' => null,
 				'classPath' => null,
@@ -27,7 +27,7 @@ class ComponentResolver {
 			$includePath = $link['path'];
 			if ($aPluginCode) {
 				$includePath .= DIRECTORY_SEPARATOR . 'plugins';
-				$includePath .= DIRECTORY_SEPARATOR . strtolower(ok_strCamelToDash($aPluginCode));
+				$includePath .= DIRECTORY_SEPARATOR . strtolower(StringUtils::camelToDash($aPluginCode));
 			}
 			if ($link['classPath']) $includePath .= $link['classPath'];
 			$includePath .= '/' . $classFileName;
@@ -47,8 +47,9 @@ class ComponentResolver {
 		if (DEBUG_COMPONENT_RESOLUTION) {
 			Env::getLogger()->debug(
 				get_called_class() . "::" . __FUNCTION__ . "() resolved '"
-				. ucfirst($aViewTypeCode) . $aClassNamePart . "' component " . ok_varInfo($component)
-				. " from chain " . ok_varInfo($chain)
+				. ucfirst($aPluginCode) . ucfirst($aViewTypeCode) . $aClassNamePart
+				. "' component " . MiscUtils::varInfo($component)
+				. " from chain " . MiscUtils::varInfo($chain)
 			);
 		}
 
