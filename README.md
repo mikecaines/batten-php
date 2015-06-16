@@ -9,7 +9,7 @@ NOTE: This package not usually used directly. It is instead used as part of a hi
 [batten-stub](https://github.com/mikecaines/batten-stub/). The batten package includes only the bare essentials
 on which you can build your own structure.
 
-This package is currently in *alpha*.
+This project is in an early and experimental state.
 
 ## More Information
 
