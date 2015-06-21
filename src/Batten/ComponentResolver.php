@@ -1,7 +1,7 @@
 <?php
 namespace Batten;
 
-use app\Environment as Env;
+use App\Environment as Env;
 use Ok\MiscUtils;
 use Ok\StringUtils;
 use Ok\StructUtils;
@@ -15,28 +15,34 @@ class ComponentResolver {
 
 		foreach ($chain as $link) {
 			$link = StructUtils::merge([
-				'namespace' => '\\',
+				'namespace' => null,
 				'path' => null,
-				'classPath' => null,
+				'pluginsSubNamespace' => '\\Plugins',
+				'pluginsSubPath' => '/Plugins',
 			], $link);
 
+			$classNamespace = $link['namespace'];
 			$className = $this->generateClassName($link, $aClassNamePart, $aViewTypeCode, $aPluginCode);
-			$qualifiedClassName = $link['namespace'] . '\\' . $className;
 			$classFileName = $className . '.php';
 
 			$includePath = $link['path'];
 			if ($aPluginCode) {
-				$includePath .= DIRECTORY_SEPARATOR . 'plugins';
-				$includePath .= DIRECTORY_SEPARATOR . strtolower(StringUtils::camelToDash($aPluginCode));
+				$pluginNamespace = ucfirst(StringUtils::dashToCamel($aPluginCode));
+				$pluginDir = $pluginNamespace;
+
+				$classNamespace .= $link['pluginsSubNamespace'];
+				$classNamespace .= '\\' . $pluginNamespace;
+
+				$includePath .= $link['pluginsSubPath'];
+				$includePath .= '/' . $pluginDir;
 			}
-			if ($link['classPath']) $includePath .= $link['classPath'];
 			$includePath .= '/' . $classFileName;
 
 			$realIncludePath = realpath($includePath);
 
 			if ($realIncludePath !== false) {
 				$component = [
-					'className' => $qualifiedClassName,
+					'className' => $classNamespace . '\\' . $className,
 					'includeFilePath' => $realIncludePath,
 				];
 
@@ -57,13 +63,7 @@ class ComponentResolver {
 	}
 
 	public function generateClassName($aLink, $aClassNamePart, $aViewTypeCode = null, $aPluginCode = null) {
-		$link = array_merge([
-			'moduleClassNamePart' => null,
-		], $aLink);
-
-		$className = $link['moduleClassNamePart'];
-
-		if ($aPluginCode != null) $className .= ucfirst($aPluginCode);
+		$className = '';
 
 		if ($aViewTypeCode != null) $className .= ucfirst($aViewTypeCode);
 

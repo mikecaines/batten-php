@@ -1,7 +1,7 @@
 <?php
 namespace Batten;
 
-use app\Environment as Env;
+use App\Environment as Env;
 use Ok\StructUtils;
 
 class ClassAutoloader {
@@ -18,11 +18,10 @@ class ClassAutoloader {
 				$link = StructUtils::merge([
 					'namespace' => null,
 					'path' => null,
-					'classPath' => null,
 				], $link);
 
 				if ($link['namespace'] === $namespace) {
-					$tempPath = $link['path'] . $link['classPath'] . DIRECTORY_SEPARATOR . $className . '.php';
+					$tempPath = $link['path'] . DIRECTORY_SEPARATOR . $className . '.php';
 
 					if (file_exists($tempPath)) {
 						/** @noinspection PhpIncludeInspection */

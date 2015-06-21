@@ -4,7 +4,7 @@
  * which are not in this package.
  */
 
-namespace app {
+namespace App {
 	if (true) die();
 
 	abstract class Environment extends \Batten\Environment {}

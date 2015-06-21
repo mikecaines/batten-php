@@ -1,7 +1,7 @@
 <?php
 namespace Batten;
 
-use app\Environment as Env;
+use App\Environment as Env;
 use ErrorException;
 use Ok\MiscUtils;
 use Ok\StringUtils;
@@ -24,9 +24,8 @@ abstract class Controller implements ControllerInterface {
 			],
 
 			'app' => [
-				'namespace' => 'app',
-				'path' => Env::getAppPackageFilePath() . '/app/base',
-				'classPath' => DIRECTORY_SEPARATOR . 'toolkit',
+				'namespace' => 'App',
+				'path' => Env::getAppPackageFilePath() . '/App',
 			],
 		];
 	}
@@ -66,11 +65,12 @@ abstract class Controller implements ControllerInterface {
 		$chain = static::getBaseChain();
 
 		if ($aModuleCode != null) {
+			$moduleNamespace = ucfirst(StringUtils::dashToCamel($aModuleCode));
+			$moduleDir = $moduleNamespace;
+
 			$chain[$aModuleCode] = [
-				'namespace' => 'app',
-				'path' => Env::getAppPackageFilePath() . '/app/modules/' . strtolower(StringUtils::camelToDash($aModuleCode)),
-				'classPath' => DIRECTORY_SEPARATOR . 'toolkit',
-				'moduleClassNamePart' => ucfirst($aModuleCode),
+				'namespace' => 'App\\Modules\\' . $moduleNamespace,
+				'path' => Env::getAppPackageFilePath() . '/App/Modules/' . $moduleDir,
 			];
 		}
 

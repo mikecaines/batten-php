@@ -1,7 +1,7 @@
 <?php
 namespace Batten;
 
-use app\Environment as Env;
+use App\Environment as Env;
 use Ok\MiscUtils;
 
 class Logger implements LoggerInterface {
