@@ -10,7 +10,7 @@
   "repositories": [
     {
       "type": "vcs",
-      "url": "https://github.com/mikecaines/ok-kit-php"
+      "url": "https://github.com/mikecaines/ok-kit-php.git"
     }
   ],
 
