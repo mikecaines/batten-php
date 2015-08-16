@@ -81,6 +81,9 @@ interface ControllerInterface {
 	 */
 	public function createModel();
 
+	/**
+	 * @return ModelInterface|null
+	 */
 	public function getModel();
 
 	public function setModel(ModelInterface $aModel);
