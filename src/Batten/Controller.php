@@ -95,7 +95,7 @@ abstract class Controller implements ControllerInterface {
 		self::$booted = true;
 
 		if (DEBUG_MEM_USAGE) {
-			Env::getLogger()->debug('mem[boot begin]: ' . memory_get_usage());
+			Env::getLogger()->debug('mem[boot begin]: ' . ceil(memory_get_usage()/1024) . 'K');
 		}
 
 		if (DEBUG_PATHS) {
@@ -115,8 +115,8 @@ abstract class Controller implements ControllerInterface {
 		static::reboot($info);
 
 		if (DEBUG_MEM_USAGE) {
-			Env::getLogger()->debug('mem[boot end]: ' . memory_get_usage());
-			Env::getLogger()->debug('mem-peak[boot end]: ' . memory_get_peak_usage());
+			Env::getLogger()->debug('mem[boot end]: ' . ceil(memory_get_usage()/1024) . 'K');
+			Env::getLogger()->debug('mem-peak[boot end]: ' . ceil(memory_get_peak_usage()/1024) . 'K');
 
 			Env::getLogger()->debug('realpath-cache-size[boot end]: ' . (ceil(realpath_cache_size()/1024)) . 'K/' . ini_get('realpath_cache_size'));
 		}
@@ -167,7 +167,7 @@ abstract class Controller implements ControllerInterface {
 
 			if ($finalController) {
 				if (DEBUG_MEM_USAGE) {
-					Env::getLogger()->debug('mem[before go]: ' . memory_get_usage());
+					Env::getLogger()->debug('mem[before go]: ' . ceil(memory_get_usage()/1024) . 'K');
 				}
 
 				$finalController->go();
