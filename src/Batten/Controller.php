@@ -3,6 +3,7 @@ namespace Batten;
 
 use App\Environment as Env;
 use ErrorException;
+use Exception;
 use Ok\MiscUtils;
 use Ok\StringUtils;
 use Ok\StructUtils;
@@ -12,7 +13,7 @@ abstract class Controller implements ControllerInterface {
 
 	static private $booted = false;
 	static private $bootPath = [];
-	static private $bootLoopError;
+	static private $bootLoopRecoveryAttempted;
 	static private $componentResolver;
 	static private $classAutoloaderRegistered = false;
 
@@ -142,21 +143,29 @@ abstract class Controller implements ControllerInterface {
 			//imply a 'could not route' error
 			$finalError = new UnresolvedRouteException(
 				"Could not route: '" . $aInfo['nextRoute'] . "'."
+				. "\nIterations were: " . MiscUtils::varInfo(array_values(self::$bootPath))
 			);
 		}
 
 		if ($finalError) {
 			try {
-				if (self::$bootLoopError) {
-					throw self::$bootLoopError;
+				//if we've already attempted to recover from a boot loop error
+				if (self::$bootLoopRecoveryAttempted) {
+					//don't try to recover again, to avoid causing an infinite loop
+					throw new Exception(
+						"Unrecoverable boot loop error.",
+						0,
+						$finalError
+					);
 				}
 
+				//attempt to handle the error and recover
+				self::$bootLoopRecoveryAttempted = true;
 				$stubController->handleException($finalError);
 			}
 			catch (\Exception $ex) {
 				//if we get here, we couldn't even handle the exception, so it's game over man, game over...
 				Env::getLogger()->error($ex);
-				$finalController = null;
 			}
 
 			unset($stubController);
@@ -247,93 +256,92 @@ abstract class Controller implements ControllerInterface {
 				//or the temp controller is not the target controller (comparing by module code)
 				//or we still have routing to do
 				if ($tempController == null || $tempInfo['moduleCode'] != $tempController->getCode() || $tempInfo['nextRoute'] != null) {
-					//if the current iteration is a duplication of an earlier iteration
-					if (array_key_exists($tempIteration, self::$bootPath)) {
-						//we have detected an infinite boot loop
-
-						//store the infinite loop error (which is used by reboot() )
-						self::$bootLoopError = new \Exception(
-							"Infinite boot loop. Iterations were " . MiscUtils::varInfo(array_values(self::$bootPath))
-						);
-
+					//if the current iteration has not been encountered before
+					if (!array_key_exists($tempIteration, self::$bootPath)) {
 						//append the current iteration to the boot path
 						self::$bootPath[$tempIteration] = [
 							'moduleCode' => $tempInfo['moduleCode'],
 							'nextRoute' => $tempInfo['nextRoute'],
 						];
 
-						throw self::$bootLoopError;
-					}
-
-					//append the current iteration to the boot path
-					self::$bootPath[$tempIteration] = [
-						'moduleCode' => $tempInfo['moduleCode'],
-						'nextRoute' => $tempInfo['nextRoute'],
-					];
-
-					//if we already have a temp controller
-					if ($tempController) {
-						//tell it to create the target controller
-						$tempController = $tempController::fromCode($tempInfo['moduleCode']);
-						$tempController->init();
-					}
-
-					//else we don't have a controller yet
-					else {
-						//if the target controller's code is the same as the current controller
-						if ($tempInfo['moduleCode'] == $this->getCode()) {
-							//use the current controller as the target controller
-							$tempController = $this;
-						}
-
-						//else the target controller's code is different that the current controller
-						else {
-							//tell the current controller to create the target controller
-							$tempController = $this::fromCode($tempInfo['moduleCode']);
+						//if we already have a temp controller
+						if ($tempController) {
+							//tell it to create the target controller
+							$tempController = $tempController::fromCode($tempInfo['moduleCode']);
 							$tempController->init();
 						}
-					}
 
-					//attach the new input to the new temp controller
-					$newInput = $tempController->createInput();
-					if ($tempInput) {
-						$newInput->merge($tempInput);
-					}
-					else {
-						$newInput->importFromGlobals();
-					}
-					$tempInput = $newInput;
-					unset($newInput);
-					$tempController->setInput($tempInput);
+						//else we don't have a controller yet
+						else {
+							//if the target controller's code is the same as the current controller
+							if ($tempInfo['moduleCode'] == $this->getCode()) {
+								//use the current controller as the target controller
+								$tempController = $this;
+							}
 
-					//attach the new model to the new temp controller
-					$newModel = $tempController->createModel();
-					$newModel->init();
-					if ($tempModel) {
-						$newModel->merge($tempModel);
-					}
-					else {
-						if ($aModelData) {
-							$newModel->merge($aModelData);
-						}
-					}
-					$tempModel = $newModel;
-					unset($newModel);
-					$tempController->setModel($tempModel);
-
-					//if we have routing to do
-					if ($tempInfo['nextRoute'] != null || $loopCount == 0) {
-						//tell the temp controller to process the route
-						$newInfo = $tempController->processRoute($tempInfo);
-
-						if (DEBUG_ROUTING) {
-							Env::getLogger()->debug(get_class($tempController) . ' routed from -> to: ' . MiscUtils::varInfo($tempInfo) . ' -> ' . MiscUtils::varInfo($newInfo));
+							//else the target controller's code is different that the current controller
+							else {
+								//tell the current controller to create the target controller
+								$tempController = $this::fromCode($tempInfo['moduleCode']);
+								$tempController->init();
+							}
 						}
 
-						$tempInfo = $newInfo;
-						unset($newInfo);
+						//attach the new input to the new temp controller
+						$newInput = $tempController->createInput();
+						if ($tempInput) {
+							$newInput->merge($tempInput);
+						}
+						else {
+							$newInput->importFromGlobals();
+						}
+						$tempInput = $newInput;
+						unset($newInput);
+						$tempController->setInput($tempInput);
 
-						//if we get here, the next iteration of the boot loop will now occur
+						//attach the new model to the new temp controller
+						$newModel = $tempController->createModel();
+						$newModel->init();
+						if ($tempModel) {
+							$newModel->merge($tempModel);
+						}
+						else {
+							if ($aModelData) {
+								$newModel->merge($aModelData);
+							}
+						}
+						$tempModel = $newModel;
+						unset($newModel);
+						$tempController->setModel($tempModel);
+
+						//if we have routing to do
+						if ($tempInfo['nextRoute'] != null || $loopCount == 0) {
+							//tell the temp controller to process the route
+							$newInfo = $tempController->processRoute($tempInfo);
+
+							if (DEBUG_ROUTING) {
+								Env::getLogger()->debug(get_class($tempController) . ' routed from -> to: ' . MiscUtils::varInfo($tempInfo) . ' -> ' . MiscUtils::varInfo($newInfo));
+							}
+
+							$tempInfo = $newInfo;
+							unset($newInfo);
+
+							//if we get here, the next iteration of the boot loop will now occur
+						}
+					}
+
+					//else the current iteration is a duplication of an earlier iteration
+					else {
+						//we have detected an infinite boot loop, and cannot resolve the controller
+
+						$tempController = null;
+						$keepRouting = false;
+
+						//append the current iteration to the boot path
+						self::$bootPath[$tempIteration] = [
+							'moduleCode' => $tempInfo['moduleCode'],
+							'nextRoute' => $tempInfo['nextRoute'],
+						];
 					}
 				}
 
