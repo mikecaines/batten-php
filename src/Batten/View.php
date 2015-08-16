@@ -34,7 +34,15 @@ abstract class View implements ViewInterface {
 	}
 
 	protected function resolveHintedInput() {
+		if (Reflector::inSurfaceMethodCall()) {
+			$this->dispatchEvent(
+				new Event('app-resolve-hinted-input', ['target' => $this])
+			);
 
+			$this->dispatchEvent(
+				new Event('resolve-hinted-input', ['target' => $this])
+			);
+		}
 	}
 
 	public function getCode() {
