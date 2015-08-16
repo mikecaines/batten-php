@@ -117,6 +117,8 @@ abstract class Controller implements ControllerInterface {
 		if (DEBUG_MEM_USAGE) {
 			Env::getLogger()->debug('mem[boot end]: ' . memory_get_usage());
 			Env::getLogger()->debug('mem-peak[boot end]: ' . memory_get_peak_usage());
+
+			Env::getLogger()->debug('realpath-cache-size[boot end]: ' . (ceil(realpath_cache_size()/1024)) . 'K/' . ini_get('realpath_cache_size'));
 		}
 	}
 
