@@ -16,6 +16,10 @@ abstract class Environment {
 		return self::$appPackageFilePath;
 	}
 
+	static public function getAppDependenciesFilePath() {
+		return APP_DEPENDENCIES_FILE_PATH;
+	}
+
 	static public function getRequestId() {
 		if (!self::$requestId) {
 			self::$requestId = MiscUtils::guid();
