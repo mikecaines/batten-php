@@ -385,9 +385,6 @@ abstract class Controller implements ControllerInterface {
 
 	public function go() {
 		try {
-			$view = null;
-			$hintedInput = null;
-
 			$viewType = $this->getRequestedViewType();
 
 			if ($viewType != null) {
