@@ -8,6 +8,8 @@ interface InputInterface extends ToArrayInterface {
 
 	public function merge($aData);
 
+	public function mergeReverse($aData);
+
 	/**
 	 * @param string $aPath
 	 * @param array|string $aValue

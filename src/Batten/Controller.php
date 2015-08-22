@@ -394,7 +394,7 @@ abstract class Controller implements ControllerInterface {
 
 				$hintedInput = $view->getHintedInput();
 				if ($hintedInput) {
-					$this->getInput()->merge($hintedInput);
+					$this->getInput()->mergeReverse($hintedInput);
 				}
 				unset($hintedInput);
 
