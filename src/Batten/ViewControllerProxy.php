@@ -13,6 +13,10 @@ class ViewControllerProxy implements ViewControllerProxyInterface {
 		return $this->controller->getChain($aCode);
 	}
 
+	public function createHints() {
+		return $this->controller->createHints();
+	}
+
 	public function createInput() {
 		return $this->controller->createInput();
 	}

@@ -20,6 +20,11 @@ interface ViewControllerProxyInterface {
 	public function createView($aType);
 
 	/**
+	 * @return HintsInterface
+	 */
+	public function createHints();
+
+	/**
 	 * @return InputInterface
 	 */
 	public function createInput();

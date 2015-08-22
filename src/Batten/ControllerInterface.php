@@ -65,6 +65,18 @@ interface ControllerInterface {
 	public function getRequestedViewType();
 
 	/**
+	 * @return HintsInterface
+	 */
+	public function createHints();
+
+	/**
+	 * @return InputInterface|null
+	 */
+	public function getHints();
+
+	public function setHints(HintsInterface $aHints);
+
+	/**
 	 * @return InputInterface
 	 */
 	public function createInput();

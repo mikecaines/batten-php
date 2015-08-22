@@ -16,6 +16,11 @@ interface ViewInterface {
 	 */
 	public function getHintedInput();
 
+	/**
+	 * @return HintsInterface
+	 */
+	public function getHints();
+
 	public function setController(ViewControllerProxyInterface $aController);
 
 	/**

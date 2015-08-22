@@ -9,6 +9,7 @@ abstract class View implements ViewInterface {
 	private $code;
 	private $model;
 	private $input;
+	private $hints;
 	private $controller;
 	private $plugins;
 	private $options;
@@ -41,6 +42,18 @@ abstract class View implements ViewInterface {
 
 			$this->dispatchEvent(
 				new Event('resolve-hinted-input', ['target' => $this])
+			);
+		}
+	}
+
+	protected function resolveHints() {
+		if (Reflector::inSurfaceMethodCall()) {
+			$this->dispatchEvent(
+				new Event('app-resolve-hints', ['target' => $this])
+			);
+
+			$this->dispatchEvent(
+				new Event('resolve-hints', ['target' => $this])
 			);
 		}
 	}
@@ -93,6 +106,19 @@ abstract class View implements ViewInterface {
 		return $this->input;
 	}
 
+	/**
+	 * @return HintsInterface
+	 */
+	public function getHints() {
+		if (!$this->hints) {
+			if ($this->getController()) {
+				$this->hints = $this->getController()->createHints();
+			}
+		}
+
+		return $this->hints;
+	}
+
 	public function setController(ViewControllerProxyInterface $aController) {
 		$this->controller = $aController;
 	}
@@ -118,6 +144,7 @@ abstract class View implements ViewInterface {
 		$this->resolvePlugins();
 		$this->resolveOptions();
 		$this->resolveHintedInput();
+		$this->resolveHints();
 	}
 
 	public function __construct($aCode) {

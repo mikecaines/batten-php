@@ -185,6 +185,7 @@ abstract class Controller implements ControllerInterface {
 	}
 
 	private $code;
+	private $hints;
 	private $input;
 	private $model;
 	private $view;
@@ -236,6 +237,9 @@ abstract class Controller implements ControllerInterface {
 		/** @var InputInterface|null $tempInput */
 		$tempInput = null;
 
+		/** @var HintsInterface|null $hints */
+		$hints = $this->createHints();
+
 		$loopCount = 0;
 		do {
 			if ($tempInfo != null) {
@@ -286,6 +290,8 @@ abstract class Controller implements ControllerInterface {
 								$tempController->init();
 							}
 						}
+
+						$tempController->setHints($hints);
 
 						//attach the new input to the new temp controller
 						$newInput = $tempController->createInput();
@@ -398,6 +404,12 @@ abstract class Controller implements ControllerInterface {
 				}
 				unset($hintedInput);
 
+				$hints = $view->getHints();
+				if ($hints) {
+					$this->getHints()->mergeReverse($hints);
+				}
+				unset($hints);
+
 				$view->setModel($this->getModel());
 
 				$this->setView($view);
@@ -445,6 +457,18 @@ abstract class Controller implements ControllerInterface {
 
 	public function setDefaultViewType($aType) {
 		$this->defaultViewType = (string)$aType;
+	}
+
+	public function createHints() {
+		return new Hints();
+	}
+
+	public function getHints() {
+		return $this->hints;
+	}
+
+	public function setHints(HintsInterface $aHints) {
+		$this->hints = $aHints;
 	}
 
 	public function setInput(InputInterface $aInput) {
