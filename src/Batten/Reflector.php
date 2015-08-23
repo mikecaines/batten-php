@@ -15,7 +15,7 @@ class Reflector {
 		}
 
 		$backtrace = debug_backtrace($backtraceOptions, 3);
-		//NOTE: $backtrace[1] == __FUNCTION__
+		//NOTE: $backtrace[0] == __FUNCTION__
 
 		$surface = true;
 		if (count($backtrace) == 3) {
@@ -53,7 +53,7 @@ class Reflector {
 		}
 
 		$backtrace = debug_backtrace($backtraceOptions, 3);
-		//NOTE: $backtrace[1] == __FUNCTION__
+		//NOTE: $backtrace[0] == __FUNCTION__
 
 		$proceed = false;
 
