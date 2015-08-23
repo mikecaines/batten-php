@@ -62,16 +62,10 @@ abstract class View implements ViewInterface {
 		$this->model = $aModel;
 	}
 
-	/**
-	 * @return ModelInterface|null
-	 */
 	public function getModel() {
 		return $this->model;
 	}
 
-	/**
-	 * @return InputInterface
-	 */
 	public function getHintedInput() {
 		if (!$this->input) {
 			if ($this->getController()) {
@@ -82,9 +76,6 @@ abstract class View implements ViewInterface {
 		return $this->input;
 	}
 
-	/**
-	 * @return HintsInterface
-	 */
 	public function getHints() {
 		if (!$this->hints) {
 			if ($this->getController()) {
@@ -99,9 +90,6 @@ abstract class View implements ViewInterface {
 		$this->controller = $aController;
 	}
 
-	/**
-	 * @return ViewControllerProxyInterface
-	 */
 	public function getController() {
 		return $this->controller;
 	}

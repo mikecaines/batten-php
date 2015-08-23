@@ -124,7 +124,6 @@ abstract class Controller implements ControllerInterface {
 	}
 
 	static public function reboot($aInfo, $aModelData = null) {
-		/** @var ControllerInterface $stubController */
 		$stubController = static::fromCode($aInfo['moduleCode']);
 		$stubController->init();
 
@@ -203,12 +202,6 @@ abstract class Controller implements ControllerInterface {
 
 	}
 
-	/**
-	 * @param array $aInfo Boot info. See reboot() for details.
-	 * @param array|null $aModelData
-	 * @return ControllerInterface|null
-	 * @throws \Exception
-	 */
 	public function resolveController($aInfo, $aModelData = null) {
 		//this remains true until the boot loop stops.
 		//During each iteration of the boot loop, controllers are created and asked to provide the next step in the route.
@@ -220,7 +213,7 @@ abstract class Controller implements ControllerInterface {
 		//the temporary boot info passed along through the boot loop
 		$tempInfo = $aInfo;
 
-		/** @var ControllerInterface|null $tempController */
+		/** @var Controller $tempController */
 		$tempController = null;
 
 		$model = $this->createModel();
@@ -350,9 +343,6 @@ abstract class Controller implements ControllerInterface {
 		return $tempController;
 	}
 
-	/**
-	 * Called if the controller is resolved to the final controller in resolveController().
-	 */
 	public function markResolved() {
 
 	}
@@ -436,9 +426,6 @@ abstract class Controller implements ControllerInterface {
 		$this->input = $aInput;
 	}
 
-	/**
-	 * @return InputInterface|null
-	 */
 	public function getInput() {
 		return $this->input;
 	}
@@ -447,17 +434,10 @@ abstract class Controller implements ControllerInterface {
 		$this->model = $aModel;
 	}
 
-	/**
-	 * @return ModelInterface|null
-	 */
 	public function getModel() {
 		return $this->model;
 	}
 
-	/**
-	 * @return ModelInterface
-	 * @throws \Exception if model cannot be created.
-	 */
 	public function createModel() {
 		$code = $this->getCode();
 
@@ -483,7 +463,6 @@ abstract class Controller implements ControllerInterface {
 			);
 		}
 
-		/** @var ModelInterface $model */
 		$model = new $component['className']($code);
 
 		return $model;
@@ -515,15 +494,11 @@ abstract class Controller implements ControllerInterface {
 			);
 		}
 
-		/** @var ViewInterface $view */
 		$view = new $component['className']($code);
 
 		return $view;
 	}
 
-	/**
-	 * @return ViewInterface|null
-	 */
 	public function getView() {
 		return $this->view;
 	}

@@ -5,9 +5,6 @@ abstract class ControllerPlugin {
 	private $controller;
 	private $code;
 
-	/**
-	 * @return ControllerInterface
-	 */
 	public function getController() {
 		return $this->controller;
 	}
@@ -16,9 +13,6 @@ abstract class ControllerPlugin {
 		return $this->code;
 	}
 
-	/**
-	 * @return ControllerPluginProxy|null
-	 */
 	public function getViewProxy() {
 		return null;
 	}

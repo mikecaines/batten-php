@@ -40,6 +40,9 @@ interface ControllerInterface {
 	 */
 	public function resolveController($aInfo, $aModelData = null);
 
+	/**
+	 * Called if the controller is resolved to the final controller in resolveController().
+	 */
 	public function markResolved();
 
 	public function processRoute($aInfo);
