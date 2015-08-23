@@ -6,13 +6,8 @@ use Ok\StructUtils;
 class Hints implements HintsInterface {
 	private $data = [];
 
-	public function getAsString($aPath) {
+	public function get($aPath) {
 		return StructUtils::get($this->data, $aPath);
-	}
-
-	public function getAsArray($aPath) {
-		$value = StructUtils::get($this->data, $aPath);
-		return is_array($value) ? $value : [];
 	}
 
 	public function toArray() {
@@ -24,16 +19,10 @@ class Hints implements HintsInterface {
 	}
 
 	public function merge($aData) {
-		$incomingData = StructUtils::toArray($aData, true);
-		$incomingData = StructUtils::unflatten($incomingData, '.');
-
-		$this->data = StructUtils::merge($this->data, $incomingData);
+		$this->data = StructUtils::merge($this->data, $aData);
 	}
 
 	public function mergeReverse($aData) {
-		$incomingData = StructUtils::toArray($aData, true);
-		$incomingData = StructUtils::unflatten($incomingData, '.');
-
-		$this->data = StructUtils::merge($incomingData, $this->data);
+		$this->data = StructUtils::merge(StructUtils::toArray($aData), $this->data);
 	}
 }

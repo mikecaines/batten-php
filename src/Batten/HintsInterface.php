@@ -16,13 +16,7 @@ interface HintsInterface extends ToArrayInterface {
 
 	/**
 	 * @param $aPath
-	 * @return string
+	 * @return mixed
 	 */
-	public function getAsString($aPath);
-
-	/**
-	 * @param $aPath
-	 * @return array
-	 */
-	public function getAsArray($aPath);
+	public function get($aPath);
 }

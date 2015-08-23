@@ -123,7 +123,7 @@ abstract class Controller implements ControllerInterface {
 		}
 	}
 
-	static public function reboot($aInfo, $aModelData = null) {
+	static public function reboot($aInfo, $aHintsData = null) {
 		$stubController = static::fromCode($aInfo['moduleCode']);
 		$stubController->init();
 
@@ -131,7 +131,7 @@ abstract class Controller implements ControllerInterface {
 		$finalError = null;
 
 		try {
-			$finalController = $stubController->resolveController($aInfo, $aModelData);
+			$finalController = $stubController->resolveController($aInfo, $aHintsData);
 		}
 		catch (\Exception $ex) {
 			$finalError = $ex;
@@ -202,7 +202,7 @@ abstract class Controller implements ControllerInterface {
 
 	}
 
-	public function resolveController($aInfo, $aModelData = null) {
+	public function resolveController($aInfo, $aHintsData = null) {
 		//this remains true until the boot loop stops.
 		//During each iteration of the boot loop, controllers are created and asked to provide the next step in the route.
 		//Once the same step is returned twice (i.e. no movement), we consider the route successfully processed, and the
@@ -218,12 +218,12 @@ abstract class Controller implements ControllerInterface {
 
 		$model = $this->createModel();
 		$model->init();
-		if ($aModelData) $model->merge($aModelData);
 
 		$input = $this->createInput();
 		$input->importFromGlobals();
 
 		$hints = $this->createHints();
+		if ($aHintsData) $hints->merge($aHintsData);
 
 		$loopCount = 0;
 		do {

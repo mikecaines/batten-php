@@ -23,10 +23,10 @@ interface ControllerInterface {
 
 	/**
 	 * @param array $aInfo
-	 * @param array|null $aModelData
+	 * @param array|null $aHintsData
 	 * @return
 	 */
-	static public function reboot($aInfo, $aModelData = null);
+	static public function reboot($aInfo, $aHintsData = null);
 
 	/**
 	 * @return string
@@ -35,10 +35,10 @@ interface ControllerInterface {
 
 	/**
 	 * @param $aInfo
-	 * @param array|null $aModelData
+	 * @param array|null $aHintsData
 	 * @return ControllerInterface|null
 	 */
-	public function resolveController($aInfo, $aModelData = null);
+	public function resolveController($aInfo, $aHintsData = null);
 
 	/**
 	 * Called if the controller is resolved to the final controller in resolveController().
@@ -73,7 +73,7 @@ interface ControllerInterface {
 	public function createHints();
 
 	/**
-	 * @return InputInterface|null
+	 * @return HintsInterface|null
 	 */
 	public function getHints();
 
