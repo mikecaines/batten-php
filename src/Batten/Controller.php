@@ -223,13 +223,13 @@ abstract class Controller implements ControllerInterface {
 		/** @var ControllerInterface|null $tempController */
 		$tempController = null;
 
-		/** @var ModelInterface|null $tempModel */
-		$tempModel = null;
+		$model = $this->createModel();
+		$model->init();
+		if ($aModelData) $model->merge($aModelData);
 
-		/** @var InputInterface|null $tempInput */
-		$tempInput = null;
+		$input = $this->createInput();
+		$input->importFromGlobals();
 
-		/** @var HintsInterface|null $hints */
 		$hints = $this->createHints();
 
 		$loopCount = 0;
@@ -283,34 +283,14 @@ abstract class Controller implements ControllerInterface {
 							}
 						}
 
+						//attach the hints to the new temp controller
 						$tempController->setHints($hints);
 
-						//attach the new input to the new temp controller
-						$newInput = $tempController->createInput();
-						if ($tempInput) {
-							$newInput->merge($tempInput);
-						}
-						else {
-							$newInput->importFromGlobals();
-						}
-						$tempInput = $newInput;
-						unset($newInput);
-						$tempController->setInput($tempInput);
+						//attach the input to the new temp controller
+						$tempController->setInput($input);
 
-						//attach the new model to the new temp controller
-						$newModel = $tempController->createModel();
-						$newModel->init();
-						if ($tempModel) {
-							$newModel->merge($tempModel);
-						}
-						else {
-							if ($aModelData) {
-								$newModel->merge($aModelData);
-							}
-						}
-						$tempModel = $newModel;
-						unset($newModel);
-						$tempController->setModel($tempModel);
+						//attach the model to the new temp controller
+						$tempController->setModel($model);
 
 						//if we have routing to do
 						if ($tempInfo['nextRoute'] != null || $loopCount == 0) {
