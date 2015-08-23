@@ -23,39 +23,15 @@ abstract class View implements ViewInterface {
 	}
 
 	protected function resolveOptions() {
-		if (Reflector::inSurfaceMethodCall()) {
-			$this->dispatchEvent(
-				new Event('app-resolve-options', ['target' => $this])
-			);
 
-			$this->dispatchEvent(
-				new Event('resolve-options', ['target' => $this])
-			);
-		}
 	}
 
 	protected function resolveHintedInput() {
-		if (Reflector::inSurfaceMethodCall()) {
-			$this->dispatchEvent(
-				new Event('app-resolve-hinted-input', ['target' => $this])
-			);
 
-			$this->dispatchEvent(
-				new Event('resolve-hinted-input', ['target' => $this])
-			);
-		}
 	}
 
 	protected function resolveHints() {
-		if (Reflector::inSurfaceMethodCall()) {
-			$this->dispatchEvent(
-				new Event('app-resolve-hints', ['target' => $this])
-			);
 
-			$this->dispatchEvent(
-				new Event('resolve-hints', ['target' => $this])
-			);
-		}
 	}
 
 	public function getCode() {
@@ -131,11 +107,7 @@ abstract class View implements ViewInterface {
 	}
 
 	public function render() {
-		if (Reflector::inSurfaceMethodCall()) {
-			$this->dispatchEvent(new Event('render', [
-				'target' => $this,
-			]));
-		}
+
 	}
 
 	public function init() {

@@ -200,15 +200,7 @@ abstract class Controller implements ControllerInterface {
 	}
 
 	protected function resolveOptions() {
-		if (Reflector::inSurfaceMethodCall()) {
-			$this->dispatchEvent(
-				new Event('app-resolve-options', ['target' => $this])
-			);
 
-			$this->dispatchEvent(
-				new Event('resolve-options', ['target' => $this])
-			);
-		}
 	}
 
 	/**
@@ -425,18 +417,7 @@ abstract class Controller implements ControllerInterface {
 	}
 
 	public function doTask() {
-		//override this method to do module-specific tasks.
-		//Remember to call the parent definition
 
-		if (Reflector::inSurfaceMethodCall()) {
-			$this->dispatchEvent(
-				new Event('app-do-task', ['target' => $this])
-			);
-
-			$this->dispatchEvent(
-				new Event('do-task', ['target' => $this])
-			);
-		}
 	}
 
 	public function getClassAutoloader() {
