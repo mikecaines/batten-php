@@ -14,7 +14,7 @@ class ComponentResolver {
 		$component = null;
 
 		foreach ($chain as $link) {
-			$link = StructUtils::merge([
+			$link = array_replace([
 				'namespace' => null,
 				'path' => null,
 				'pluginsSubNamespace' => '\\Plugins',

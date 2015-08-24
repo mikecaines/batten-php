@@ -15,7 +15,7 @@ class ClassAutoloader {
 			$chain = array_reverse($this->controller->getChain($this->controller->getCode()));
 
 			foreach ($chain as $link) {
-				$link = StructUtils::merge([
+				$link = array_replace([
 					'namespace' => null,
 					'path' => null,
 				], $link);

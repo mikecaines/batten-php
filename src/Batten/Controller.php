@@ -229,10 +229,10 @@ abstract class Controller implements ControllerInterface {
 		do {
 			if ($tempInfo != null) {
 				//normalize the boot info
-				$tempInfo = StructUtils::merge([
+				$tempInfo = array_replace([
 					'moduleCode' => '',
 					'nextRoute' => '',
-				], $tempInfo ?: []);
+				], $tempInfo);
 
 				//create a unique key representing this iteration of the loop.
 				//This is used to detect infinite loops, due to a later iteration routing back to an earlier iteration
