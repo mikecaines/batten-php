@@ -27,7 +27,7 @@ class ComponentResolver {
 
 			$includePath = $link['path'];
 			if ($aPluginCode) {
-				$pluginNamespace = ucfirst(StringUtils::dashToCamel($aPluginCode));
+				$pluginNamespace = $aPluginCode;
 				$pluginDir = $pluginNamespace;
 
 				$classNamespace .= $link['pluginsSubNamespace'];
@@ -53,7 +53,7 @@ class ComponentResolver {
 		if (DEBUG_COMPONENT_RESOLUTION) {
 			Env::getLogger()->debug(
 				get_called_class() . "::" . __FUNCTION__ . "() resolved '"
-				. ucfirst($aPluginCode) . ucfirst($aViewTypeCode) . $aClassNamePart
+				. $aPluginCode . $aViewTypeCode . $aClassNamePart
 				. "' component " . MiscUtils::varInfo($component)
 				. " from chain " . MiscUtils::varInfo($chain)
 			);
@@ -65,7 +65,7 @@ class ComponentResolver {
 	public function generateClassName($aLink, $aClassNamePart, $aViewTypeCode = null, $aPluginCode = null) {
 		$className = '';
 
-		if ($aViewTypeCode != null) $className .= ucfirst($aViewTypeCode);
+		if ($aViewTypeCode != null) $className .= $aViewTypeCode;
 
 		$className .= $aClassNamePart;
 

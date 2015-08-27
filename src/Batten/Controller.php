@@ -66,7 +66,7 @@ abstract class Controller implements ControllerInterface {
 		$chain = static::getBaseChain();
 
 		if ($aModuleCode != null) {
-			$moduleNamespace = ucfirst(StringUtils::dashToCamel($aModuleCode));
+			$moduleNamespace = $aModuleCode;
 			$moduleDir = $moduleNamespace;
 
 			$chain[$aModuleCode] = [

@@ -46,7 +46,7 @@ class ViewPlugins {
 	 * @throws Exception
 	 */
 	public function get($aInterface, $aInstallationCode) {
-		if (array_key_exists($aInstallationCode, $this->items)) {
+		if (array_key_exists($aInstallationCode, $this->items) && $this->items[$aInstallationCode]['plugin']) {
 			if (!($this->items[$aInstallationCode]['plugin'] instanceof $aInterface)) {
 				throw new Exception(
 					"Plugin installed at '" . $aInstallationCode
