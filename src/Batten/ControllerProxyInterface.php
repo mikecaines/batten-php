@@ -29,8 +29,6 @@ interface ControllerProxyInterface {
 	 */
 	public function createInput();
 
-	public function addEventListener($aEventType, $aListener);
-
 	/**
 	 * @return ControllerPluginsProxy
 	 */

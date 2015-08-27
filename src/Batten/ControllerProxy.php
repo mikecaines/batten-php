@@ -33,10 +33,6 @@ class ControllerProxy implements ControllerProxyInterface {
 		return $this->plugins;
 	}
 
-	public function addEventListener($aType, $aListener) {
-		$this->controller->addEventListener($aType, $aListener);
-	}
-
 	public function __construct(ControllerInterface $aController) {
 		$this->controller = $aController;
 	}
