@@ -4,34 +4,34 @@ namespace Batten;
 class ControllerPluginsProxy {
 	private $plugins;
 
-	/** @var ControllerPlugin[] */
+	/** @var ControllerPluginProxy[] */
 	private $proxies = [];
 
 	protected function getActualPlugins() {
 		return $this->plugins;
 	}
 
-	public function get($aPluginCode) {
+	public function get($aInterface, $aInstallationCode) {
 		$proxy = null;
 
-		if (array_key_exists($aPluginCode, $this->proxies)) {
-			$proxy = $this->proxies[$aPluginCode];
+		if (array_key_exists($aInstallationCode, $this->proxies)) {
+			$proxy = $this->proxies[$aInstallationCode];
 		}
 
 		else {
-			$plugin = $this->getActualPlugins()->get($aPluginCode);
+			$plugin = $this->getActualPlugins()->get('Batten\ControllerPlugin', $aInstallationCode);
 
 			if ($plugin) {
-				$proxy = $plugin->getViewProxy();
-				$this->proxies[$aPluginCode] = $proxy;
+				$proxy = $plugin->getProxy();
+				$this->proxies[$aInstallationCode] = $proxy;
 			}
 		}
 
 		return $proxy;
 	}
 
-	public function getRegisteredCodes() {
-		return $this->plugins->getRegisteredCodes();
+	public function getRegistrations() {
+		return $this->plugins->getRegistrations();
 	}
 
 	public function __construct(ControllerPlugins $aPlugins) {

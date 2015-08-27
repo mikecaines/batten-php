@@ -7,15 +7,15 @@ class ControllerPlugins {
 	private $controller;
 	private $items = [];
 
-	public function register($aPluginCode) {
-		$plugin = null;
+	public function register($aComponentCode, $aInstallationCode) {
+		if (!array_key_exists($aInstallationCode, $this->items)) {
+			$plugin = null;
 
-		if (!array_key_exists($aPluginCode, $this->items)) {
 			$component = $this->controller->getComponentResolver()->resolveComponent(
 				$this->controller->getChain($this->controller->getCode()),
 				'ControllerPlugin',
 				null,
-				$aPluginCode
+				$aComponentCode
 			);
 
 			if ($component) {
@@ -29,28 +29,49 @@ class ControllerPlugins {
 					);
 				}
 
-				$plugin = new $component['className']($this->controller, $aPluginCode);
+				$plugin = new $component['className']($this->controller, $aComponentCode);
 			}
 
-			$this->items[$aPluginCode] = $plugin;
+			$this->items[$aInstallationCode] = [
+				'plugin' => $plugin,
+				'componentCode' => $aComponentCode,
+			];
 		}
-
-		return $plugin;
 	}
 
 	/**
-	 * @param string $aPluginCode
+	 * @param string $aInterface
+	 * @param string $aInstallationCode
 	 * @return ControllerPlugin|null
+	 * @throws Exception
 	 */
-	public function get($aPluginCode) {
-		return array_key_exists($aPluginCode, $this->items)
-			? $this->items[$aPluginCode]
-			: null
-		;
+	public function get($aInterface, $aInstallationCode) {
+		if (array_key_exists($aInstallationCode, $this->items)) {
+			if (!($this->items[$aInstallationCode]['plugin'] instanceof $aInterface)) {
+				throw new Exception(
+					"Plugin installed at '" . $aInstallationCode
+					. "', is of type '" . get_class($this->items[$aInstallationCode]['plugin'])
+					. "', which does not implement interface '" . $aInterface . "'."
+				);
+			}
+
+			return $this->items[$aInstallationCode]['plugin'];
+		}
+
+		return null;
 	}
 
-	public function getRegisteredCodes() {
-		return array_keys($this->items);
+	public function getRegistrations() {
+		$registrations = [];
+
+		foreach ($this->items as $k => $item) {
+			$registrations[] = [
+				'componentCode' => $item['componentCode'],
+				'installationCode' => $k,
+			];
+		}
+
+		return $registrations;
 	}
 
 	public function __construct(Controller $aController) {

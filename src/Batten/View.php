@@ -17,8 +17,8 @@ abstract class View implements ViewInterface {
 	protected $type;
 
 	protected function resolvePlugins() {
-		foreach ($this->getController()->getPlugins()->getRegisteredCodes() as $registeredCode) {
-			$this->getPlugins()->register($registeredCode);
+		foreach ($this->getController()->getPlugins()->getRegistrations() as $registration) {
+			$this->getPlugins()->register($registration['componentCode'], $registration['installationCode']);
 		}
 	}
 
@@ -86,7 +86,7 @@ abstract class View implements ViewInterface {
 		return $this->hints;
 	}
 
-	public function setController(ViewControllerProxyInterface $aController) {
+	public function setController(ControllerProxyInterface $aController) {
 		$this->controller = $aController;
 	}
 

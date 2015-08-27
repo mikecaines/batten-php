@@ -21,10 +21,10 @@ interface ViewInterface {
 	 */
 	public function getHints();
 
-	public function setController(ViewControllerProxyInterface $aController);
+	public function setController(ControllerProxyInterface $aController);
 
 	/**
-	 * @return ViewControllerProxyInterface|null
+	 * @return ControllerProxyInterface|null
 	 */
 	public function getController();
 

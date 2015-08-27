@@ -7,15 +7,15 @@ class ViewPlugins {
 	private $view;
 	private $items = [];
 
-	public function register($aPluginCode) {
-		$plugin = null;
+	public function register($aComponentCode, $aInstallationCode) {
+		if (!array_key_exists($aInstallationCode, $this->items)) {
+			$plugin = null;
 
-		if (!array_key_exists($aPluginCode, $this->items)) {
 			$component = $this->view->getController()->getComponentResolver()->resolveComponent(
 				$this->view->getController()->getChain($this->view->getCode()),
 				'ViewPlugin',
 				$this->view->getType(),
-				$aPluginCode
+				$aComponentCode
 			);
 
 			if ($component) {
@@ -29,24 +29,49 @@ class ViewPlugins {
 					);
 				}
 
-				$plugin = new $component['className']($this->view, $aPluginCode);
+				$plugin = new $component['className']($this->view, $aComponentCode);
 			}
 
-			$this->items[$aPluginCode] = $plugin;
+			$this->items[$aInstallationCode] = [
+				'plugin' => $plugin,
+				'componentCode' => $aComponentCode,
+			];
+		}
+	}
+
+	/**
+	 * @param string $aInterface
+	 * @param string $aInstallationCode
+	 * @return ViewPlugin|null
+	 * @throws Exception
+	 */
+	public function get($aInterface, $aInstallationCode) {
+		if (array_key_exists($aInstallationCode, $this->items)) {
+			if (!($this->items[$aInstallationCode]['plugin'] instanceof $aInterface)) {
+				throw new Exception(
+					"Plugin installed at '" . $aInstallationCode
+					. "', is of type '" . get_class($this->items[$aInstallationCode]['plugin'])
+					. "', which does not implement interface '" . $aInterface . "'."
+				);
+			}
+
+			return $this->items[$aInstallationCode]['plugin'];
 		}
 
-		return $plugin;
+		return null;
 	}
 
-	public function get($aPluginCode) {
-		return array_key_exists($aPluginCode, $this->items)
-			? $this->items[$aPluginCode]
-			: null
-		;
-	}
+	public function getRegistrations() {
+		$registrations = [];
 
-	public function getRegisteredCodes() {
-		return array_keys($this->items);
+		foreach ($this->items as $k => $item) {
+			$registrations[] = [
+				'componentCode' => $item['componentCode'],
+				'installationCode' => $k,
+			];
+		}
+
+		return $registrations;
 	}
 
 	public function __construct(View $aView) {

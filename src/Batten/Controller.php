@@ -192,7 +192,7 @@ abstract class Controller implements ControllerInterface {
 	private $options;
 	private $plugins;
 	private $classAutoloader;
-	private $viewProxy;
+	private $proxy;
 
 	protected function resolvePlugins() {
 
@@ -357,7 +357,7 @@ abstract class Controller implements ControllerInterface {
 
 			if ($viewType != null) {
 				$view = $this->createView($viewType);
-				$view->setController($this->getViewProxy());
+				$view->setController($this->getProxy());
 				$view->init();
 
 				$hintedInput = $view->getHintedInput();
@@ -507,12 +507,12 @@ abstract class Controller implements ControllerInterface {
 		$this->view = $aView;
 	}
 
-	public function getViewProxy() {
-		if (!$this->viewProxy) {
-			$this->viewProxy = new ViewControllerProxy($this);
+	public function getProxy() {
+		if (!$this->proxy) {
+			$this->proxy = new ControllerProxy($this);
 		}
 
-		return $this->viewProxy;
+		return $this->proxy;
 	}
 
 	public function getCode() {

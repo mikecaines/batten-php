@@ -13,7 +13,10 @@ abstract class ControllerPlugin {
 		return $this->code;
 	}
 
-	public function getViewProxy() {
+	/**
+	 * @return ControllerPluginProxy|null
+	 */
+	public function getProxy() {
 		return null;
 	}
 

@@ -1,7 +1,7 @@
 <?php
 namespace Batten;
 
-interface ViewControllerProxyInterface {
+interface ControllerProxyInterface {
 	/**
 	 * @return ComponentResolver
 	 */

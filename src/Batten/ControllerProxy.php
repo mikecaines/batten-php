@@ -1,7 +1,7 @@
 <?php
 namespace Batten;
 
-class ViewControllerProxy implements ViewControllerProxyInterface {
+class ControllerProxy implements ControllerProxyInterface {
 	private $controller;
 	private $plugins;
 
