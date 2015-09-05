@@ -31,7 +31,7 @@ abstract class Controller implements ControllerInterface {
 		];
 	}
 
-	static public function fromCode($aCode) {
+	static public function fromCode($aCode, $aOptions = array()) {
 		$component = static::getComponentResolver()->resolveComponent(
 			static::getChain($aCode),
 			'Controller',
@@ -57,7 +57,7 @@ abstract class Controller implements ControllerInterface {
 		}
 
 		/** @var Controller $controller */
-		$controller = new $component['className']($aCode);
+		$controller = new $component['className']($aCode, $aOptions);
 
 		return $controller;
 	}

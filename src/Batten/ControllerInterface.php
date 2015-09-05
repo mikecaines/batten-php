@@ -4,9 +4,10 @@ namespace Batten;
 interface ControllerInterface {
 	/**
 	 * @param string $aCode
+	 * @param array $aOptions
 	 * @return ControllerInterface
 	 */
-	static public function fromCode($aCode);
+	static public function fromCode($aCode, $aOptions = array());
 
 	/**
 	 * @param string $aCode
