@@ -11,6 +11,7 @@ abstract class Environment {
 	static private $logger;
 	static private $standardOutput;
 	static private $appPackageFilePath;
+	static private $options;
 
 	static public function getAppPackageFilePath() {
 		return self::$appPackageFilePath;
@@ -48,6 +49,11 @@ abstract class Environment {
 		}
 
 		return self::$standardOutput;
+	}
+
+	static public function getOptions() {
+		if (!self::$options) self::$options = new Options(['readOnly'=>true]);
+		return self::$options;
 	}
 
 	static public function init($aOptions) {
