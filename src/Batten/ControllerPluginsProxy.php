@@ -11,7 +11,7 @@ class ControllerPluginsProxy {
 		return $this->plugins;
 	}
 
-	public function get($aInterface, $aInstallationCode) {
+	public function get($aInstallationCode) {
 		$proxy = null;
 
 		if (array_key_exists($aInstallationCode, $this->proxies)) {
@@ -19,7 +19,7 @@ class ControllerPluginsProxy {
 		}
 
 		else {
-			$plugin = $this->getActualPlugins()->get('Batten\ControllerPlugin', $aInstallationCode);
+			$plugin = $this->getActualPlugins()->get($aInstallationCode);
 
 			if ($plugin) {
 				$proxy = $plugin->getProxy();

@@ -40,21 +40,12 @@ class ControllerPlugins {
 	}
 
 	/**
-	 * @param string $aInterface
 	 * @param string $aInstallationCode
 	 * @return ControllerPlugin|null
 	 * @throws Exception
 	 */
-	public function get($aInterface, $aInstallationCode) {
+	public function get($aInstallationCode) {
 		if (array_key_exists($aInstallationCode, $this->items) && $this->items[$aInstallationCode]['plugin']) {
-			if (!($this->items[$aInstallationCode]['plugin'] instanceof $aInterface)) {
-				throw new Exception(
-					"Plugin installed at '" . $aInstallationCode
-					. "', is of type '" . get_class($this->items[$aInstallationCode]['plugin'])
-					. "', which does not implement interface '" . $aInterface . "'."
-				);
-			}
-
 			return $this->items[$aInstallationCode]['plugin'];
 		}
 
