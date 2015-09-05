@@ -2,6 +2,8 @@
 namespace Batten;
 
 abstract class ControllerPlugin {
+	use EventTargetTrait;
+
 	private $controller;
 	private $code;
 
