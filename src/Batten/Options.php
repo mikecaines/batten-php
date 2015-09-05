@@ -1,6 +1,7 @@
 <?php
 namespace Batten;
 
+use Exception;
 use Ok\ToArrayInterface;
 
 class Options implements ToArrayInterface {
@@ -13,8 +14,14 @@ class Options implements ToArrayInterface {
 	}
 
 	public function set($aCode, $aValue) {
+		if ($this->readOnly && $this->has($aCode)) {
+			throw new Exception(
+				"Option '$aCode' is read only."
+			);
+		}
+
 		if (!(is_scalar($aValue) || $aValue === null)) {
-			throw new \Exception(
+			throw new Exception(
 				"Option values must be scalar or null."
 			);
 		}
@@ -24,7 +31,7 @@ class Options implements ToArrayInterface {
 
 	public function get($aCode) {
 		if (!array_key_exists($aCode, $this->data)) {
-			throw new \Exception(
+			throw new Exception(
 				"Unknown option: '" . $aCode . "'."
 			);
 		}
@@ -38,5 +45,9 @@ class Options implements ToArrayInterface {
 
 	public function toArray() {
 		return $this->data;
+	}
+
+	function __construct($aOptions = []) {
+		$this->readOnly = array_key_exists('readOnly', $aOptions) ? (bool)$aOptions['readOnly'] : false;
 	}
 }
