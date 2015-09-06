@@ -7,27 +7,9 @@ use Ok\MiscUtils;
 require_once __DIR__ . '/main.php';
 
 abstract class Environment {
-	static private $requestId;
 	static private $logger;
 	static private $standardOutput;
-	static private $appPackageFilePath;
 	static private $options;
-
-	static public function getAppPackageFilePath() {
-		return self::$appPackageFilePath;
-	}
-
-	static public function getAppDependenciesFilePath() {
-		return APP_DEPENDENCIES_FILE_PATH;
-	}
-
-	static public function getRequestId() {
-		if (!self::$requestId) {
-			self::$requestId = MiscUtils::guid();
-		}
-
-		return self::$requestId;
-	}
 
 	/**
 	 * @return Logger
@@ -52,12 +34,22 @@ abstract class Environment {
 	}
 
 	static public function getOptions() {
-		if (!self::$options) self::$options = new Options(['readOnly'=>true]);
+		if (!self::$options) {
+			require __DIR__ . '/Options.php';
+			self::$options = new Options(['readOnly'=>true]);
+		}
+
 		return self::$options;
 	}
 
 	static public function init($aOptions) {
-		//validate app package path
+		$options = static::getOptions();
+
+		$options->add('requestId', MiscUtils::guid());
+		$options->add('appDependenciesFilePath', APP_DEPENDENCIES_FILE_PATH);
+
+
+		//validate app package file path
 
 		if (!array_key_exists('appPackageFilePath', $aOptions)) {
 			throw new Exception(
@@ -73,6 +65,6 @@ abstract class Environment {
 			);
 		}
 
-		self::$appPackageFilePath = $path;
+		$options->add('appPackageFilePath', $path);
 	}
 }

@@ -26,7 +26,7 @@ abstract class Controller implements ControllerInterface {
 
 			'app' => [
 				'namespace' => 'App',
-				'path' => Env::getAppPackageFilePath() . '/App',
+				'path' => Env::getOptions()->get('appPackageFilePath') . '/App',
 			],
 		];
 	}
@@ -71,7 +71,7 @@ abstract class Controller implements ControllerInterface {
 
 			$chain['module'] = [
 				'namespace' => 'App\\Modules\\' . $moduleNamespace,
-				'path' => Env::getAppPackageFilePath() . '/App/Modules/' . $moduleDir,
+				'path' => Env::getOptions()->get('appPackageFilePath') . '/App/Modules/' . $moduleDir,
 			];
 		}
 
@@ -100,8 +100,8 @@ abstract class Controller implements ControllerInterface {
 		}
 
 		if (DEBUG_PATHS) {
-			Env::getLogger()->debug('App dependencies file path: '. APP_DEPENDENCIES_FILE_PATH);
-			Env::getLogger()->debug('App package file path: '. Env::getAppPackageFilePath());
+			Env::getLogger()->debug('App dependencies file path: '. Env::getOptions()->get('appDependenciesFilePath'));
+			Env::getLogger()->debug('App package file path: '. Env::getOptions()->get('appPackageFilePath'));
 		}
 
 		set_error_handler(function ($aNumber, $aMessage, $aFile, $aLine) {

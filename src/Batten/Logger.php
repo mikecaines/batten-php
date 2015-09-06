@@ -6,7 +6,7 @@ use Ok\MiscUtils;
 
 class Logger implements LoggerInterface {
 	protected function processEntry($aMessage, $aContext = null, $aType) {
-		$output = '[request=' . Env::getRequestId() . ']';
+		$output = '[request=' . Env::getOptions()->get('requestId') . ']';
 
 		$output .= ' [date=' . date('c') . ']';
 
