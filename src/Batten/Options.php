@@ -30,7 +30,7 @@ class Options implements ToArrayInterface {
 	}
 
 	public function get($aCode) {
-		if (!array_key_exists($aCode, $this->data)) {
+		if (!$this->has($aCode)) {
 			throw new Exception(
 				"Unknown option: '" . $aCode . "'."
 			);
