@@ -20,7 +20,10 @@ class Logger implements LoggerInterface {
 		$output .= ' [type=' . $typeName . ']';
 
 		$output .= ': ' . $aMessage;
-		$output .= ' Details: ' . MiscUtils::varInfo($aContext);
+
+		if ($aContext !== null) {
+			$output .= ' Details: ' . MiscUtils::varInfo($aContext);
+		}
 
 		error_log($output);
 	}
