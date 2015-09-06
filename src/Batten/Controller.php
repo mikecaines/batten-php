@@ -142,6 +142,7 @@ abstract class Controller implements ControllerInterface {
 			//imply a 'could not route' error
 			$finalError = new UnresolvedRouteException(
 				"Could not route: '" . $aInfo['nextRoute'] . "'."
+				. "\nInitial route was: " . MiscUtils::varInfo(static::getInitialRoute())
 				. "\nIterations were: " . MiscUtils::varInfo(array_values(self::$bootPath))
 			);
 		}
