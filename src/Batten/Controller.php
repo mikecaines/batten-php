@@ -5,8 +5,6 @@ use App\Environment as Env;
 use ErrorException;
 use Exception;
 use Ok\MiscUtils;
-use Ok\StringUtils;
-use Ok\StructUtils;
 
 abstract class Controller implements ControllerInterface {
 	use EventTargetTrait;
@@ -15,7 +13,6 @@ abstract class Controller implements ControllerInterface {
 	static private $bootPath = [];
 	static private $bootLoopRecoveryAttempted;
 	static private $componentResolver;
-	static private $classAutoloaderRegistered = false;
 
 	static protected function getBaseChain() {
 		return $chain = [
@@ -192,7 +189,6 @@ abstract class Controller implements ControllerInterface {
 	private $defaultViewType;
 	private $options;
 	private $plugins;
-	private $classAutoloader;
 	private $proxy;
 
 	protected function resolvePlugins() {
@@ -391,14 +387,6 @@ abstract class Controller implements ControllerInterface {
 
 	}
 
-	public function getClassAutoloader() {
-		if (!$this->classAutoloader) {
-			$this->classAutoloader = new ClassAutoloader($this);
-		}
-
-		return $this->classAutoloader;
-	}
-
 	public function handleException(\Exception $aEx) {
 		Env::getLogger()->error($aEx);
 	}
@@ -538,11 +526,6 @@ abstract class Controller implements ControllerInterface {
 
 	public function init() {
 		//this method provides a hook to resolve plugins, options, etc.
-
-		if (!self::$classAutoloaderRegistered) {
-			spl_autoload_register([$this->getClassAutoloader(), 'handleClassAutoload'], true, false);
-			self::$classAutoloaderRegistered = true;
-		}
 
 		$this->resolvePlugins();
 		$this->resolveOptions();
