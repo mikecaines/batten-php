@@ -6,9 +6,18 @@ abstract class ControllerPlugin {
 
 	private $controller;
 	private $code;
+	private $options;
 
 	public function getController() {
 		return $this->controller;
+	}
+
+	public function getOptions() {
+		if (!$this->options) {
+			$this->options = new Options();
+		}
+
+		return $this->options;
 	}
 
 	public function getCode() {
