@@ -6,6 +6,7 @@ use Ok\MiscUtils;
 
 require_once __DIR__ . '/main.php';
 require_once APP_DEPENDENCIES_FILE_PATH . '/mikecaines/ok-kit-php/src/Ok/StructUtils.php';
+require_once APP_DEPENDENCIES_FILE_PATH . '/mikecaines/ok-kit-php/src/Ok/MiscUtils.php';
 
 abstract class Environment {
 	static private $logger;
@@ -36,7 +37,7 @@ abstract class Environment {
 
 	static public function getOptions() {
 		if (!self::$options) {
-			require __DIR__ . '/Options.php';
+			require_once __DIR__ . '/Options.php';
 			self::$options = new Options(['readOnly'=>true]);
 		}
 
