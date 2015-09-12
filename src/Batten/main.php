@@ -2,4 +2,4 @@
 namespace Batten;
 
 //define low level debug flag
-if (!defined('Batten\DEBUG')) define('Batten\DEBUG', false);
+if (!defined('App\DEBUG')) define('App\DEBUG', false);

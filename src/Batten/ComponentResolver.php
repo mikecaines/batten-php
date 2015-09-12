@@ -50,7 +50,7 @@ class ComponentResolver {
 			}
 		}
 
-		if (\Batten\DEBUG && Env::getOptions()->get('debugComponentResolution')) {
+		if (\App\DEBUG && Env::getOptions()->get('debugComponentResolution')) {
 			Env::getLogger()->debug(
 				get_called_class() . "::" . __FUNCTION__ . "() resolved '"
 				. $aPluginCode . $aViewTypeCode . $aClassNamePart

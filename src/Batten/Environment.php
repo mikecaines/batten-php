@@ -5,8 +5,8 @@ use Exception;
 use Ok\MiscUtils;
 
 require_once __DIR__ . '/main.php';
-require_once APP_DEPENDENCIES_FILE_PATH . '/mikecaines/ok-kit-php/src/Ok/StructUtils.php';
-require_once APP_DEPENDENCIES_FILE_PATH . '/mikecaines/ok-kit-php/src/Ok/MiscUtils.php';
+require_once \App\DEPENDENCIES_FILE_PATH . '/mikecaines/ok-kit-php/src/Ok/StructUtils.php';
+require_once \App\DEPENDENCIES_FILE_PATH . '/mikecaines/ok-kit-php/src/Ok/MiscUtils.php';
 
 abstract class Environment {
 	static private $logger;
@@ -48,7 +48,7 @@ abstract class Environment {
 		$vars = static::getOptions();
 
 		$vars->add('requestId', MiscUtils::guid());
-		$vars->add('appDependenciesFilePath', APP_DEPENDENCIES_FILE_PATH);
+		$vars->add('appDependenciesFilePath', \App\DEPENDENCIES_FILE_PATH);
 
 
 		//validate app package file path
@@ -70,7 +70,7 @@ abstract class Environment {
 		$vars->add('appPackageFilePath', $path);
 
 
-		if (DEBUG) {
+		if (\App\DEBUG) {
 			$config = $aOptions['config'];
 
 			$vars->add('debugComponentResolution', array_key_exists('debugComponentResolution', $config) ? (bool)$config['debugComponentResolution'] : false);

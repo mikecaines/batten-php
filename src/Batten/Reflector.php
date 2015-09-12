@@ -12,7 +12,7 @@ class Reflector {
 	static public function inSurfaceMethodCall() {
 		$backtraceOptions = DEBUG_BACKTRACE_IGNORE_ARGS;
 
-		if (\Batten\DEBUG && Env::getOptions()->get('debugReflection')) {
+		if (\App\DEBUG && Env::getOptions()->get('debugReflection')) {
 			$backtraceOptions = $backtraceOptions | DEBUG_BACKTRACE_PROVIDE_OBJECT;
 		}
 
@@ -31,7 +31,7 @@ class Reflector {
 			}
 		}
 
-		if (\Batten\DEBUG && Env::getOptions()->get('debugReflection')) {
+		if (\App\DEBUG && Env::getOptions()->get('debugReflection')) {
 			Environment::getLogger()->debug(
 				get_class($backtrace[1]['object'])
 				. '::' . $backtrace[1]['function']
@@ -50,7 +50,7 @@ class Reflector {
 	static public function inSurfaceOrModuleMethodCall() {
 		$backtraceOptions = DEBUG_BACKTRACE_IGNORE_ARGS;
 
-		if (\Batten\DEBUG && Env::getOptions()->get('debugReflection')) {
+		if (\App\DEBUG && Env::getOptions()->get('debugReflection')) {
 			$backtraceOptions = $backtraceOptions | DEBUG_BACKTRACE_PROVIDE_OBJECT;
 		}
 
@@ -79,7 +79,7 @@ class Reflector {
 			}
 		}
 
-		if (\Batten\DEBUG && Env::getOptions()->get('debugReflection')) {
+		if (\App\DEBUG && Env::getOptions()->get('debugReflection')) {
 			Environment::getLogger()->debug(
 				get_class($backtrace[1]['object'])
 				. '::' . $backtrace[1]['function']

@@ -1,7 +1,7 @@
 <?php
 namespace Batten;
 
-require_once APP_DEPENDENCIES_FILE_PATH . '/mikecaines/ok-kit-php/src/Ok/ToArrayInterface.php';
+require_once \App\DEPENDENCIES_FILE_PATH . '/mikecaines/ok-kit-php/src/Ok/ToArrayInterface.php';
 
 use Exception;
 use Ok\ToArrayInterface;
