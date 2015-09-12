@@ -27,7 +27,7 @@ class ClassAutoloader {
 						/** @noinspection PhpIncludeInspection */
 						include_once $tempPath;
 
-						if (\Batten\DEBUG_CLASS_AUTOLOAD) {
+						if (\Batten\DEBUG && Env::getOptions()->get('debugClassAutoload')) {
 							Env::getLogger()->debug('Autoloaded class ' . $aClass . ' from file ' . $tempPath . '.');
 						}
 

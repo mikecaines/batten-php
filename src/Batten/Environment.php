@@ -5,6 +5,7 @@ use Exception;
 use Ok\MiscUtils;
 
 require_once __DIR__ . '/main.php';
+require_once APP_DEPENDENCIES_FILE_PATH . '/mikecaines/ok-kit-php/src/Ok/StructUtils.php';
 
 abstract class Environment {
 	static private $logger;
@@ -43,10 +44,10 @@ abstract class Environment {
 	}
 
 	static public function init($aOptions) {
-		$options = static::getOptions();
+		$vars = static::getOptions();
 
-		$options->add('requestId', MiscUtils::guid());
-		$options->add('appDependenciesFilePath', APP_DEPENDENCIES_FILE_PATH);
+		$vars->add('requestId', MiscUtils::guid());
+		$vars->add('appDependenciesFilePath', APP_DEPENDENCIES_FILE_PATH);
 
 
 		//validate app package file path
@@ -65,6 +66,19 @@ abstract class Environment {
 			);
 		}
 
-		$options->add('appPackageFilePath', $path);
+		$vars->add('appPackageFilePath', $path);
+
+
+		if (DEBUG) {
+			$config = $aOptions['config'];
+
+			$vars->add('debugComponentResolution', array_key_exists('debugComponentResolution', $config) ? (bool)$config['debugComponentResolution'] : false);
+			$vars->add('debugComponentLifetimes', array_key_exists('debugComponentLifetimes', $config) ? (bool)$config['debugComponentLifetimes'] : false);
+			$vars->add('debugMemUsage', array_key_exists('debugMemUsage', $config) ? (bool)$config['debugMemUsage'] : false);
+			$vars->add('debugPaths', array_key_exists('debugPaths', $config) ? (bool)$config['debugPaths'] : false);
+			$vars->add('debugRouting', array_key_exists('debugRouting', $config) ? (bool)$config['debugRouting'] : false);
+			$vars->add('debugReflection', array_key_exists('debugReflection', $config) ? (bool)$config['debugReflection'] : false);
+			$vars->add('debugClassAutoload', array_key_exists('debugClassAutoload', $config) ? (bool)$config['debugClassAutoload'] : false);
+		}
 	}
 }

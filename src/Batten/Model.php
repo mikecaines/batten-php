@@ -42,7 +42,7 @@ class Model implements ModelInterface {
 	}
 
 	public function __construct($aCode) {
-		if (DEBUG_COMPONENT_LIFETIMES) {
+		if (\Batten\DEBUG && Env::getOptions()->get('debugComponentLifetimes')) {
 			Env::getLogger()->debug(get_class($this) . "[code=" . $aCode . "] was constructed.");
 		}
 
@@ -50,7 +50,7 @@ class Model implements ModelInterface {
 	}
 
 	public function __destruct() {
-		if (DEBUG_COMPONENT_LIFETIMES) {
+		if (\Batten\DEBUG && Env::getOptions()->get('debugComponentLifetimes')) {
 			Env::getLogger()->debug(get_class($this) . "[code=" . $this->getCode() . "] was destructed.");
 		}
 	}
