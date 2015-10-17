@@ -11,7 +11,7 @@ require_once \App\DEPENDENCIES_FILE_PATH . '/mikecaines/ok-kit-php/src/Ok/MiscUt
 abstract class Environment {
 	static private $logger;
 	static private $standardOutput;
-	static private $options;
+	static private $vars;
 
 	/**
 	 * @return Logger
@@ -35,17 +35,17 @@ abstract class Environment {
 		return self::$standardOutput;
 	}
 
-	static public function getOptions() {
-		if (!self::$options) {
+	static public function getVars() {
+		if (!self::$vars) {
 			require_once __DIR__ . '/Options.php';
-			self::$options = new Options(['readOnly'=>true]);
+			self::$vars = new Options(['readOnly'=>true]);
 		}
 
-		return self::$options;
+		return self::$vars;
 	}
 
 	static public function init($aOptions) {
-		$vars = static::getOptions();
+		$vars = static::getVars();
 
 		$vars->add('requestId', MiscUtils::guid());
 		$vars->add('appDependenciesFilePath', \App\DEPENDENCIES_FILE_PATH);

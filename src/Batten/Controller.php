@@ -23,7 +23,7 @@ abstract class Controller implements ControllerInterface {
 
 			'app' => [
 				'namespace' => 'App',
-				'path' => Env::getOptions()->get('appPackageFilePath') . '/App',
+				'path' => Env::getVars()->get('appPackageFilePath') . '/App',
 			],
 		];
 	}
@@ -68,7 +68,7 @@ abstract class Controller implements ControllerInterface {
 
 			$chain['module'] = [
 				'namespace' => 'App\\Modules\\' . $moduleNamespace,
-				'path' => Env::getOptions()->get('appPackageFilePath') . '/App/Modules/' . $moduleDir,
+				'path' => Env::getVars()->get('appPackageFilePath') . '/App/Modules/' . $moduleDir,
 			];
 		}
 
@@ -92,13 +92,13 @@ abstract class Controller implements ControllerInterface {
 
 		self::$booted = true;
 
-		if (\App\DEBUG && Env::getOptions()->get('debugMemUsage')) {
+		if (\App\DEBUG && Env::getVars()->get('debugMemUsage')) {
 			Env::getLogger()->debug('mem[boot begin]: ' . ceil(memory_get_usage()/1024) . 'K');
 		}
 
-		if (\App\DEBUG && Env::getOptions()->get('debugPaths')) {
-			Env::getLogger()->debug('App dependencies file path: '. Env::getOptions()->get('appDependenciesFilePath'));
-			Env::getLogger()->debug('App package file path: '. Env::getOptions()->get('appPackageFilePath'));
+		if (\App\DEBUG && Env::getVars()->get('debugPaths')) {
+			Env::getLogger()->debug('App dependencies file path: '. Env::getVars()->get('appDependenciesFilePath'));
+			Env::getLogger()->debug('App package file path: '. Env::getVars()->get('appPackageFilePath'));
 		}
 
 		set_error_handler(function ($aNumber, $aMessage, $aFile, $aLine) {
@@ -112,7 +112,7 @@ abstract class Controller implements ControllerInterface {
 
 		static::reboot($info);
 
-		if (\App\DEBUG && Env::getOptions()->get('debugMemUsage')) {
+		if (\App\DEBUG && Env::getVars()->get('debugMemUsage')) {
 			Env::getLogger()->debug('mem[boot end]: ' . ceil(memory_get_usage()/1024) . 'K');
 			Env::getLogger()->debug('mem-peak[boot end]: ' . ceil(memory_get_peak_usage()/1024) . 'K');
 
@@ -172,7 +172,7 @@ abstract class Controller implements ControllerInterface {
 			unset($stubController);
 
 			if ($finalController) {
-				if (\App\DEBUG && Env::getOptions()->get('debugMemUsage')) {
+				if (\App\DEBUG && Env::getVars()->get('debugMemUsage')) {
 					Env::getLogger()->debug('mem[before go]: ' . ceil(memory_get_usage()/1024) . 'K');
 				}
 
@@ -287,7 +287,7 @@ abstract class Controller implements ControllerInterface {
 							//tell the temp controller to process the route
 							$newInfo = $tempController->processRoute($tempInfo);
 
-							if (\App\DEBUG && Env::getOptions()->get('debugRouting')) {
+							if (\App\DEBUG && Env::getVars()->get('debugRouting')) {
 								Env::getLogger()->debug(get_class($tempController) . ' routed from -> to: ' . MiscUtils::varInfo($tempInfo) . ' -> ' . MiscUtils::varInfo($newInfo));
 							}
 
@@ -532,7 +532,7 @@ abstract class Controller implements ControllerInterface {
 	}
 
 	public function __construct($aCode) {
-		if (\App\DEBUG && Env::getOptions()->get('debugComponentLifetimes')) {
+		if (\App\DEBUG && Env::getVars()->get('debugComponentLifetimes')) {
 			Env::getLogger()->debug(get_class($this) . "[code=" . $aCode . "] was constructed");
 		}
 
@@ -540,7 +540,7 @@ abstract class Controller implements ControllerInterface {
 	}
 
 	public function __destruct() {
-		if (\App\DEBUG && Env::getOptions()->get('debugComponentLifetimes')) {
+		if (\App\DEBUG && Env::getVars()->get('debugComponentLifetimes')) {
 			Env::getLogger()->debug(get_class($this) . "[code=" . $this->getCode() . "] was destructed");
 		}
 	}
