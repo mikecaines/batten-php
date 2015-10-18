@@ -2,7 +2,6 @@
 namespace Batten;
 
 use App\Environment as Env;
-use ErrorException;
 use Exception;
 use Ok\MiscUtils;
 
@@ -100,10 +99,6 @@ abstract class Controller implements ControllerInterface {
 			Env::getLogger()->debug('App dependencies file path: '. Env::getVars()->get('appDependenciesFilePath'));
 			Env::getLogger()->debug('App package file path: '. Env::getVars()->get('appPackageFilePath'));
 		}
-
-		set_error_handler(function ($aNumber, $aMessage, $aFile, $aLine) {
-			throw new ErrorException($aMessage, 0, $aNumber, $aFile, $aLine);
-		});
 
 		$info = [
 			'moduleCode' => '',

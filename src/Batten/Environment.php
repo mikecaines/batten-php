@@ -1,6 +1,7 @@
 <?php
 namespace Batten;
 
+use ErrorException;
 use Exception;
 use Ok\MiscUtils;
 
@@ -45,6 +46,10 @@ abstract class Environment {
 	}
 
 	static public function init($aOptions) {
+		set_error_handler(function ($aNumber, $aMessage, $aFile, $aLine) {
+			throw new ErrorException($aMessage, 0, $aNumber, $aFile, $aLine);
+		});
+
 		$vars = static::getVars();
 
 		$vars->add('requestId', MiscUtils::guid());
