@@ -3,8 +3,6 @@ namespace Batten;
 
 use App\Environment as Env;
 use Ok\MiscUtils;
-use Ok\StringUtils;
-use Ok\StructUtils;
 
 class ComponentResolver {
 	public function resolveComponent($aChain, $aClassNamePart, $aViewTypeCode = null, $aPluginCode = null) {
