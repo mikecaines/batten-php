@@ -13,20 +13,6 @@ abstract class Controller implements ControllerInterface {
 	static private $bootLoopRecoveryAttempted;
 	static private $componentResolver;
 
-	static protected function getBaseChain() {
-		return $chain = [
-			__NAMESPACE__ => [
-				'namespace' => __NAMESPACE__,
-				'path' => __DIR__,
-			],
-
-			'app' => [
-				'namespace' => 'App',
-				'path' => Env::getVars()->get('appPackageFilePath') . '/App',
-			],
-		];
-	}
-
 	static public function fromCode($aCode, $aOptions = array()) {
 		$component = static::getComponentResolver()->resolveComponent(
 			static::getChain($aCode),
@@ -59,7 +45,7 @@ abstract class Controller implements ControllerInterface {
 	}
 
 	static public function getChain($aModuleCode) {
-		$chain = static::getBaseChain();
+		$chain = Env::getBaseChain();
 
 		if ($aModuleCode != null) {
 			$moduleNamespace = $aModuleCode;

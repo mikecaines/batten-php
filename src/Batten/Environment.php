@@ -14,6 +14,20 @@ abstract class Environment {
 	static private $standardOutput;
 	static private $vars;
 
+	static public function getBaseChain() {
+		return $chain = [
+			__NAMESPACE__ => [
+				'namespace' => __NAMESPACE__,
+				'path' => __DIR__,
+			],
+
+			'app' => [
+				'namespace' => 'App',
+				'path' => self::getVars()->get('appPackageFilePath') . '/App',
+			],
+		];
+	}
+
 	/**
 	 * @return Logger
 	 */
