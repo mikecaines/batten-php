@@ -13,7 +13,6 @@ platform for experiments with various framework concepts.
 ## More Information
 
 * [About](https://github.com/mikecaines/batten-php/wiki/About)
-* [Quick Start](https://github.com/mikecaines/batten-php/wiki/Quick-Start)
 * [Wiki](https://github.com/mikecaines/batten-php/wiki)
 * [Source](https://github.com/mikecaines/batten-php)
 
