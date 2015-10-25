@@ -6,7 +6,6 @@ use Exception;
 use Ok\MiscUtils;
 
 require_once __DIR__ . '/main.php';
-require_once \App\DEPENDENCIES_FILE_PATH . '/mikecaines/ok-kit-php/src/Ok/StructUtils.php';
 require_once \App\DEPENDENCIES_FILE_PATH . '/mikecaines/ok-kit-php/src/Ok/MiscUtils.php';
 
 abstract class Environment {
