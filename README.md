@@ -5,11 +5,10 @@ An architectural toolkit to support the server-side of a MVC micro-framework.
 Batten provides various classes, functions, and patterns which facilitate routing, component resolution, modularization,
 extension, and more. It can be used in a web-server and terminal environment.
 
-NOTE: This package not usually used directly. It is instead used as part of a higher level package, such as
-[batten-stub](https://github.com/mikecaines/batten-stub/). The batten package includes only the bare essentials
-on which you can build your own structure.
+## Status
 
-This project is in an early and experimental state.
+This project is in an early and experimental state. It serves as a
+platform for experiments with various framework concepts.
 
 ## More Information
 
@@ -20,4 +19,4 @@ This project is in an early and experimental state.
 
 ## Related Projects
 
-* [batten-stub](https://github.com/mikecaines/batten-stub)
+* [batten-js](https://github.com/mikecaines/batten-js)
