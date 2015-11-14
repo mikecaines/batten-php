@@ -8,7 +8,17 @@ class ControllerPlugins {
 	private $items = [];
 
 	public function register($aComponentCode, $aInstallationCode) {
-		if (!array_key_exists($aInstallationCode, $this->items)) {
+		if (array_key_exists($aInstallationCode, $this->items)) {
+			$existingComponentCode = $this->items[$aInstallationCode]['componentCode'];
+
+			if ($aComponentCode != $existingComponentCode) {
+				throw new Exception(
+					"Cannot register '$aComponentCode' at '$aInstallationCode' because '$existingComponentCode' is already there."
+				);
+			}
+		}
+
+		else {
 			$plugin = null;
 
 			$component = $this->controller->getComponentResolver()->resolveComponent(
@@ -37,6 +47,8 @@ class ControllerPlugins {
 				'componentCode' => $aComponentCode,
 			];
 		}
+
+		return $this->get($aInstallationCode);
 	}
 
 	/**
