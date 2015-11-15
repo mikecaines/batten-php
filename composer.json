@@ -1,20 +1,20 @@
 {
-  "name": "mikecaines/batten-php",
+	"name": "solarfield/batten-php",
 
-  "autoload": {
-    "psr-4": {
-      "Batten\\": "src/Batten"
-    }
-  },
+	"autoload": {
+		"psr-4": {
+			"Batten\\": "src/Batten"
+		}
+	},
 
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/mikecaines/ok-kit-php.git"
-    }
-  ],
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/solarfield/ok-kit-php.git"
+		}
+	],
 
-  "require": {
-      "mikecaines/ok-kit-php": "dev-master"
-  }
+	"require": {
+			"solarfield/ok-kit-php": "dev-master"
+	}
 }

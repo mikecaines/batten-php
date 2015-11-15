@@ -12,10 +12,10 @@ platform for experiments with various framework concepts.
 
 ## More Information
 
-* [About](https://github.com/mikecaines/batten-php/wiki/About)
-* [Wiki](https://github.com/mikecaines/batten-php/wiki)
-* [Source](https://github.com/mikecaines/batten-php)
+* [About](https://github.com/solarfield/batten-php/wiki/About)
+* [Wiki](https://github.com/solarfield/batten-php/wiki)
+* [Source](https://github.com/solarfield/batten-php)
 
 ## Related Projects
 
-* [batten-js](https://github.com/mikecaines/batten-js)
+* [batten-js](https://github.com/solarfield/batten-js)
