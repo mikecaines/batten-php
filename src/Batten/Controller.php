@@ -23,7 +23,7 @@ abstract class Controller implements ControllerInterface {
 
 		if (!$component) {
 			throw new \Exception(
-				"Could not resolve Controller component for module '"  . $aCode . "'."
+				"Could not resolve Controller component for module '" . $aCode . "'."
 				. " No component class files could be found."
 			);
 		}
@@ -33,7 +33,7 @@ abstract class Controller implements ControllerInterface {
 
 		if (!class_exists($component['className'])) {
 			throw new \Exception(
-				"Could not resolve Controller component for module '"  . $aCode . "'."
+				"Could not resolve Controller component for module '" . $aCode . "'."
 				. " No component class was found in include file '" . $component['includeFilePath'] . "'."
 			);
 		}
@@ -418,7 +418,7 @@ abstract class Controller implements ControllerInterface {
 
 		if (!$component) {
 			throw new \Exception(
-				"Could not resolve Model component for module '"  . $code . "'."
+				"Could not resolve Model component for module '" . $code . "'."
 				. " No component class files could be found."
 			);
 		}
@@ -428,7 +428,7 @@ abstract class Controller implements ControllerInterface {
 
 		if (!class_exists($component['className'])) {
 			throw new \Exception(
-				"Could not resolve Model component for module '"  . $code . "'."
+				"Could not resolve Model component for module '" . $code . "'."
 				. " No component class was found in include file '" . $component['includeFilePath'] . "'."
 			);
 		}
@@ -449,7 +449,7 @@ abstract class Controller implements ControllerInterface {
 
 		if (!$component) {
 			throw new \Exception(
-				"Could not resolve " . $aType . " View component for module '"  . $code . "'."
+				"Could not resolve " . $aType . " View component for module '" . $code . "'."
 				. " No component class files could be found."
 			);
 		}
@@ -459,7 +459,7 @@ abstract class Controller implements ControllerInterface {
 
 		if (!class_exists($component['className'])) {
 			throw new \Exception(
-				"Could not resolve " . $aType . " View component for module '"  . $code . "'."
+				"Could not resolve " . $aType . " View component for module '" . $code . "'."
 				. " No component class was found in include file '" . $component['includeFilePath'] . "'."
 			);
 		}
