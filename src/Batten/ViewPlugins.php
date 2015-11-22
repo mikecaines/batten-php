@@ -39,7 +39,7 @@ class ViewPlugins {
 					);
 				}
 
-				$plugin = new $component['className']($this->view, $aComponentCode);
+				$plugin = new $component['className']($this->view, $aComponentCode, $aInstallationCode);
 			}
 
 			$this->items[$aInstallationCode] = [

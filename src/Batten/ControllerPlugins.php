@@ -39,7 +39,7 @@ class ControllerPlugins {
 					);
 				}
 
-				$plugin = new $component['className']($this->controller, $aComponentCode);
+				$plugin = new $component['className']($this->controller, $aComponentCode, $aInstallationCode);
 			}
 
 			$this->items[$aInstallationCode] = [
