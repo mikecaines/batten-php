@@ -1,7 +1,7 @@
 <?php
 namespace Batten;
 
-use Ok\ToArrayInterface;
+use Solarfield\Ok\ToArrayInterface;
 
 interface InputInterface extends ToArrayInterface {
 	public function importFromGlobals();

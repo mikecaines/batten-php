@@ -3,7 +3,7 @@ namespace Batten;
 
 use App\Environment as Env;
 use Exception;
-use Ok\MiscUtils;
+use Solarfield\Ok\MiscUtils;
 
 abstract class Controller implements ControllerInterface {
 	use EventTargetTrait;

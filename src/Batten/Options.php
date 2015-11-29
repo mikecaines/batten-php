@@ -1,10 +1,10 @@
 <?php
 namespace Batten;
 
-require_once \App\DEPENDENCIES_FILE_PATH . '/solarfield/ok-kit-php/src/Ok/ToArrayInterface.php';
+require_once \App\DEPENDENCIES_FILE_PATH . '/solarfield/ok-kit-php/src/Solarfield/Ok/ToArrayInterface.php';
 
 use Exception;
-use Ok\ToArrayInterface;
+use Solarfield\Ok\ToArrayInterface;
 
 class Options implements ToArrayInterface {
 	private $data = [];

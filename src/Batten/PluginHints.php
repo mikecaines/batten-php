@@ -1,7 +1,7 @@
 <?php
 namespace Batten;
 
-class PluginHints implements \Ok\ToArrayInterface {
+class PluginHints implements \Solarfield\Ok\ToArrayInterface {
 	/** @type string */ private $installationCode;
 	/** @var Hints */ private $hints;
 

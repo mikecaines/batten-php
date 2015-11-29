@@ -1,7 +1,7 @@
 <?php
 namespace Batten;
 
-use Ok\StructUtils;
+use Solarfield\Ok\StructUtils;
 
 class Hints implements HintsInterface {
 	private $data = [];

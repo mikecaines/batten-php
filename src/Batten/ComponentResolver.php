@@ -2,7 +2,7 @@
 namespace Batten;
 
 use App\Environment as Env;
-use Ok\MiscUtils;
+use Solarfield\Ok\MiscUtils;
 
 class ComponentResolver {
 	public function resolveComponent($aChain, $aClassNamePart, $aViewTypeCode = null, $aPluginCode = null) {

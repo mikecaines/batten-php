@@ -1,7 +1,7 @@
 <?php
 namespace Batten;
 
-class PluginOptions implements \Ok\ToArrayInterface {
+class PluginOptions implements \Solarfield\Ok\ToArrayInterface {
 	/** @type string */ private $installationCode;
 	/** @var Options */ private $options;
 

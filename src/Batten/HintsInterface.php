@@ -1,7 +1,7 @@
 <?php
 namespace Batten;
 
-use Ok\ToArrayInterface;
+use Solarfield\Ok\ToArrayInterface;
 
 interface HintsInterface extends ToArrayInterface {
 	public function merge($aData);

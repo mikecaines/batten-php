@@ -2,7 +2,7 @@
 namespace Batten;
 
 use \app\Environment as Env;
-use Ok\StructUtils;
+use Solarfield\Ok\StructUtils;
 
 class Model implements ModelInterface {
 	private $code;

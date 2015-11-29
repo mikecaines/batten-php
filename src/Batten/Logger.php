@@ -2,7 +2,7 @@
 namespace Batten;
 
 use App\Environment as Env;
-use Ok\MiscUtils;
+use Solarfield\Ok\MiscUtils;
 
 class Logger implements LoggerInterface {
 	protected function processEntry($aMessage, $aContext = null, $aType) {
