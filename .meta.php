@@ -7,5 +7,5 @@
 namespace App {
 	if (true) die();
 
-	abstract class Environment extends \Batten\Environment {}
+	abstract class Environment extends \Solarfield\Batten\Environment {}
 }

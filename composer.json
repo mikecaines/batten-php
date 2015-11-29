@@ -3,7 +3,7 @@
 
 	"autoload": {
 		"psr-4": {
-			"Batten\\": "src/Batten"
+			"Solarfield\\Batten\\": "src/Solarfield/Batten"
 		}
 	},
 
