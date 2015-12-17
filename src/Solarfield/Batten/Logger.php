@@ -8,8 +8,6 @@ class Logger implements LoggerInterface {
 	protected function processEntry($aMessage, $aContext = null, $aType) {
 		$output = '[request=' . Env::getVars()->get('requestId') . ']';
 
-		$output .= ' [date=' . date('c') . ']';
-
 		switch ($aType) {
 			case \Solarfield\Batten\LOG_LEVEL_INFO: $typeName = 'INFO'; break;
 			case \Solarfield\Batten\LOG_LEVEL_WARNING: $typeName = 'WARNING'; break;
