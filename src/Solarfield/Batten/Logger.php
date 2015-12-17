@@ -22,7 +22,15 @@ class Logger implements LoggerInterface {
 		$output .= ': ' . $aMessage;
 
 		if ($aContext !== null) {
-			$output .= ' Details: ' . MiscUtils::varInfo($aContext);
+			$output .= "\n";
+
+			if (is_object($aContext) && method_exists($aContext, '__toString')) {
+				$output .= (string)$aContext;
+			}
+
+			else {
+				$output .= MiscUtils::varInfo($aContext);
+			}
 		}
 
 		error_log($output);
