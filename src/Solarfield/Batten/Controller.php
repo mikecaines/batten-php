@@ -8,7 +8,6 @@ use Solarfield\Ok\MiscUtils;
 abstract class Controller implements ControllerInterface {
 	use EventTargetTrait;
 
-	static private $booted = false;
 	static private $bootPath = [];
 	static private $bootLoopRecoveryAttempted;
 	static private $componentResolver;
@@ -68,15 +67,7 @@ abstract class Controller implements ControllerInterface {
 		return self::$componentResolver;
 	}
 
-	static public function boot() {
-		if (self::$booted) {
-			throw new \Exception(
-				__METHOD__ . " can only be called once per request, unlike reboot()."
-			);
-		}
-
-		self::$booted = true;
-
+	static public function boot($aInfo = []) {
 		if (\App\DEBUG && Env::getVars()->get('debugMemUsage')) {
 			Env::getLogger()->debug('mem[boot begin]: ' . ceil(memory_get_usage()/1024) . 'K');
 		}
@@ -86,30 +77,21 @@ abstract class Controller implements ControllerInterface {
 			Env::getLogger()->debug('App package file path: '. Env::getVars()->get('appPackageFilePath'));
 		}
 
-		$info = [
-			'moduleCode' => '',
-			'nextRoute' => static::getInitialRoute(),
-		];
+		//default some expected boot info
+		//Any additional data will be kept and passed to resolveController()
+		$info = $aInfo;
+		if (!array_key_exists('moduleCode', $info)) $info['moduleCode'] = '';
+		if (!array_key_exists('nextRoute', $info)) $info['nextRoute'] = static::getInitialRoute();
+		if (!array_key_exists('controllerOptions', $info)) $info['controllerOptions'] = [];
 
-		static::reboot($info);
-
-		if (\App\DEBUG && Env::getVars()->get('debugMemUsage')) {
-			Env::getLogger()->debug('mem[boot end]: ' . ceil(memory_get_usage()/1024) . 'K');
-			Env::getLogger()->debug('mem-peak[boot end]: ' . ceil(memory_get_peak_usage()/1024) . 'K');
-
-			Env::getLogger()->debug('realpath-cache-size[boot end]: ' . (ceil(realpath_cache_size()/1024)) . 'K/' . ini_get('realpath_cache_size'));
-		}
-	}
-
-	static public function reboot($aInfo, $aHintsData = null) {
-		$stubController = static::fromCode($aInfo['moduleCode']);
+		$stubController = static::fromCode($info['moduleCode'], $info['controllerOptions']);
 		$stubController->init();
 
 		$finalController = null;
 		$finalError = null;
 
 		try {
-			$finalController = $stubController->resolveController($aInfo, $aHintsData);
+			$finalController = $stubController->resolveController($info);
 		}
 		catch (\Exception $ex) {
 			$finalError = $ex;
@@ -119,7 +101,7 @@ abstract class Controller implements ControllerInterface {
 		if (!$finalController && !$finalError) {
 			//imply a 'could not route' error
 			$finalError = new UnresolvedRouteException(
-				"Could not route: '" . $aInfo['nextRoute'] . "'."
+				"Could not route: '" . $info['nextRoute'] . "'."
 				. "\nInitial route was: " . MiscUtils::varInfo(static::getInitialRoute())
 				. "\nIterations were: " . MiscUtils::varInfo(array_values(self::$bootPath))
 			);
@@ -143,23 +125,24 @@ abstract class Controller implements ControllerInterface {
 			}
 			catch (\Exception $ex) {
 				//if we get here, we couldn't even handle the exception, so it's game over man, game over...
-				Env::getLogger()->error($ex);
+				static::bail($ex);
 			}
 
 			unset($stubController);
 		}
 
-		else {
-			unset($stubController);
+		if (\App\DEBUG && Env::getVars()->get('debugMemUsage')) {
+			Env::getLogger()->debug('mem[boot end]: ' . ceil(memory_get_usage()/1024) . 'K');
+			Env::getLogger()->debug('mem-peak[boot end]: ' . ceil(memory_get_peak_usage()/1024) . 'K');
 
-			if ($finalController) {
-				if (\App\DEBUG && Env::getVars()->get('debugMemUsage')) {
-					Env::getLogger()->debug('mem[before go]: ' . ceil(memory_get_usage()/1024) . 'K');
-				}
-
-				$finalController->go();
-			}
+			Env::getLogger()->debug('realpath-cache-size[boot end]: ' . (ceil(realpath_cache_size()/1024)) . 'K/' . ini_get('realpath_cache_size'));
 		}
+
+		return $finalController;
+	}
+
+	static public function bail(Exception $aEx) {
+		Env::getLogger()->error("Bailed.", $aEx);
 	}
 
 	private $code;
@@ -180,16 +163,13 @@ abstract class Controller implements ControllerInterface {
 
 	}
 
-	public function resolveController($aInfo, $aHintsData = null) {
+	public function resolveController($aInfo) {
 		//this remains true until the boot loop stops.
 		//During each iteration of the boot loop, controllers are created and asked to provide the next step in the route.
 		//Once the same step is returned twice (i.e. no movement), we consider the route successfully processed, and the
 		//last created controller is returned. Note that the controller will have a model and input already attached.
 		//If any controller during the loop routes to null, we stop and consider the route unsuccessfully processed.
 		$keepRouting = true;
-
-		//the temporary boot info passed along through the boot loop
-		$tempInfo = $aInfo;
 
 		/** @var Controller $tempController */
 		$tempController = null;
@@ -201,16 +181,23 @@ abstract class Controller implements ControllerInterface {
 		$input->importFromGlobals();
 
 		$hints = $this->createHints();
-		if ($aHintsData) $hints->merge($aHintsData);
+		if ($aInfo && array_key_exists('hints', $aInfo)) {
+			$hints->merge($aInfo['hints']);
+		}
+
+		//the temporary boot info passed along through the boot loop
+		//The only data/keys kept are moduleCode, nextRoute, controllerOptions
+		$tempInfo = $aInfo;
 
 		$loopCount = 0;
 		do {
 			if ($tempInfo != null) {
-				//normalize the boot info
-				$tempInfo = array_replace([
-					'moduleCode' => '',
-					'nextRoute' => '',
-				], $tempInfo);
+				//reset the boot info for the next iteration
+				$tempInfo = [
+					'moduleCode' => array_key_exists('moduleCode', $tempInfo) ? $tempInfo['moduleCode'] : '',
+					'nextRoute' => array_key_exists('nextRoute', $tempInfo) ? $tempInfo['nextRoute'] : '',
+					'controllerOptions' => array_key_exists('controllerOptions', $tempInfo) ? $tempInfo['controllerOptions'] : [],
+				];
 
 				//create a unique key representing this iteration of the loop.
 				//This is used to detect infinite loops, due to a later iteration routing back to an earlier iteration
@@ -234,7 +221,7 @@ abstract class Controller implements ControllerInterface {
 						//if we already have a temp controller
 						if ($tempController) {
 							//tell it to create the target controller
-							$tempController = $tempController::fromCode($tempInfo['moduleCode']);
+							$tempController = $tempController::fromCode($tempInfo['moduleCode'], $tempInfo['controllerOptions']);
 							$tempController->init();
 						}
 
@@ -249,7 +236,7 @@ abstract class Controller implements ControllerInterface {
 							//else the target controller's code is different that the current controller
 							else {
 								//tell the current controller to create the target controller
-								$tempController = $this::fromCode($tempInfo['moduleCode']);
+								$tempController = $this::fromCode($tempInfo['moduleCode'], $tempInfo['controllerOptions']);
 								$tempController->init();
 							}
 						}
@@ -329,43 +316,35 @@ abstract class Controller implements ControllerInterface {
 		return null;
 	}
 
-	public function go() {
-		try {
-			$viewType = $this->getRequestedViewType();
+	public function connect() {
+		$viewType = $this->getRequestedViewType();
 
-			if ($viewType != null) {
-				$view = $this->createView($viewType);
-				$view->setController($this->getProxy());
-				$view->init();
+		if ($viewType != null) {
+			$view = $this->createView($viewType);
+			$view->setController($this->getProxy());
+			$view->init();
 
-				$hintedInput = $view->getHintedInput();
-				if ($hintedInput) {
-					$this->getInput()->mergeReverse($hintedInput);
-				}
-				unset($hintedInput);
-
-				$hints = $view->getHints();
-				if ($hints) {
-					$this->getHints()->mergeReverse($hints);
-				}
-				unset($hints);
-
-				$view->setModel($this->getModel());
-
-				$this->setView($view);
+			$hintedInput = $view->getHintedInput();
+			if ($hintedInput) {
+				$this->getInput()->mergeReverse($hintedInput);
 			}
+			unset($hintedInput);
 
-			$this->goTasks();
-			$this->goRender();
-		}
+			$hints = $view->getHints();
+			if ($hints) {
+				$this->getHints()->mergeReverse($hints);
+			}
+			unset($hints);
 
-		catch (\Exception $ex) {
-			$this->handleException($ex);
+			$view->setModel($this->getModel());
+
+			$this->setView($view);
 		}
 	}
 
-	public function doTask() {
-
+	public function run() {
+		$this->runTasks();
+		$this->runRender();
 	}
 
 	public function handleException(\Exception $aEx) {

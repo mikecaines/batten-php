@@ -20,14 +20,11 @@ interface ControllerInterface {
 	 */
 	static public function getComponentResolver();
 
-	static public function boot();
-
 	/**
 	 * @param array $aInfo
-	 * @param array|null $aHintsData
-	 * @return
+	 * @return ControllerInterface
 	 */
-	static public function reboot($aInfo, $aHintsData = null);
+	static public function boot($aInfo = []);
 
 	/**
 	 * @return string
@@ -36,10 +33,9 @@ interface ControllerInterface {
 
 	/**
 	 * @param $aInfo
-	 * @param array|null $aHintsData
 	 * @return ControllerInterface|null
 	 */
-	public function resolveController($aInfo, $aHintsData = null);
+	public function resolveController($aInfo);
 
 	/**
 	 * Called if the controller is resolved to the final controller in resolveController().
@@ -48,13 +44,11 @@ interface ControllerInterface {
 
 	public function processRoute($aInfo);
 
-	public function go();
+	public function run();
 
-	public function goTasks();
+	public function runTasks();
 
-	public function goRender();
-
-	public function doTask();
+	public function runRender();
 
 	public function handleException(\Exception $aEx);
 
