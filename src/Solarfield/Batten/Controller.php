@@ -375,6 +375,9 @@ abstract class Controller implements ControllerInterface {
 		$this->input = $aInput;
 	}
 
+	/**
+	 * @return InputInterface
+	 */
 	public function getInput() {
 		return $this->input;
 	}
