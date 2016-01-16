@@ -69,7 +69,7 @@ class Reflector {
 			$caller = $backtrace[2];
 
 			if ($caller['function'] == $callee['function']) {
-				if (is_subclass_of($caller['class'], '\App\Controller')) {
+				if (stripos($caller['class'], 'App\Modules\\') === 0) {
 					$proceed = true;
 				}
 			}
