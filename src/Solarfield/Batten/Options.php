@@ -8,6 +8,7 @@ use Solarfield\Ok\ToArrayInterface;
 
 class Options implements ToArrayInterface {
 	private $data = [];
+	private $readOnly;
 
 	public function add($aCode, $aValue) {
 		if (!$this->has($aCode)) {
