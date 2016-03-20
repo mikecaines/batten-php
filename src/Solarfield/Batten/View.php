@@ -2,6 +2,7 @@
 namespace Solarfield\Batten;
 
 use App\Environment as Env;
+use Solarfield\Ok\EventTargetTrait;
 
 abstract class View implements ViewInterface {
 	use EventTargetTrait;

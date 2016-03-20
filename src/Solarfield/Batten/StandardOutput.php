@@ -1,6 +1,8 @@
 <?php
 namespace Solarfield\Batten;
 
+use Solarfield\Ok\EventTargetTrait;
+
 class StandardOutput {
 	use EventTargetTrait;
 

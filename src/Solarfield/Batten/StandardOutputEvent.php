@@ -1,6 +1,8 @@
 <?php
 namespace Solarfield\Batten;
 
+use Solarfield\Ok\Event;
+
 class StandardOutputEvent extends Event {
 	private $output = '';
 
