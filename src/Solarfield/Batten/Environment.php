@@ -22,7 +22,7 @@ abstract class Environment {
 
 			'app' => [
 				'namespace' => 'App',
-				'path' => self::getVars()->get('appPackageFilePath') . '/App',
+				'path' => static::getVars()->get('appPackageFilePath') . '/App',
 			],
 		];
 	}
