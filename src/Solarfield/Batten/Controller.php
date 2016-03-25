@@ -143,7 +143,7 @@ abstract class Controller implements ControllerInterface {
 	}
 
 	static public function bail(Exception $aEx) {
-		Env::getLogger()->error("Bailed.", $aEx);
+		Env::getLogger()->error("Bailed.", ['exception'=>$aEx]);
 	}
 
 	private $code;
@@ -349,7 +349,7 @@ abstract class Controller implements ControllerInterface {
 	}
 
 	public function handleException(\Exception $aEx) {
-		Env::getLogger()->error($aEx);
+		Env::getLogger()->error('Encountered exception.', ['exception'=>$aEx]);
 	}
 
 	public function getDefaultViewType() {
