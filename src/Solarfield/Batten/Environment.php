@@ -15,7 +15,7 @@ abstract class Environment {
 
 	static public function getBaseChain() {
 		return $chain = [
-			__NAMESPACE__ => [
+			'solarfield/batten-php' => [
 				'namespace' => __NAMESPACE__,
 				'path' => __DIR__,
 			],
