@@ -7,7 +7,7 @@ class ViewPlugins {
 	private $view;
 	private $items = [];
 
-	public function register($aComponentCode, $aInstallationCode) {
+	public function register($aComponentCode, $aInstallationCode, $aOptions = []) {
 		if (array_key_exists($aInstallationCode, $this->items)) {
 			$existingComponentCode = $this->items[$aInstallationCode]['componentCode'];
 
