@@ -11,11 +11,9 @@ class ViewPlugins {
 		if (array_key_exists($aInstallationCode, $this->items)) {
 			$existingComponentCode = $this->items[$aInstallationCode]['componentCode'];
 
-			if ($aComponentCode != $existingComponentCode) {
-				throw new Exception(
-					"Cannot register '$aComponentCode' at '$aInstallationCode' because '$existingComponentCode' is already there."
-				);
-			}
+			throw new Exception(
+				"Cannot register '$aComponentCode' at '$aInstallationCode' because '$existingComponentCode' is already there."
+			);
 		}
 
 		else {
