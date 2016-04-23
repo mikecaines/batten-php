@@ -1,11 +1,13 @@
 <?php
 namespace Solarfield\Batten;
 
+use App\Environment as Env;
 use Exception;
 
 class ViewPlugins {
 	private $view;
 	private $items = [];
+	private $itemsByClass = [];
 
 	public function register($aComponentCode, $aInstallationCode, $aOptions = []) {
 		if (array_key_exists($aInstallationCode, $this->items)) {
@@ -60,6 +62,31 @@ class ViewPlugins {
 		}
 
 		return null;
+	}
+
+	public function getByClass($aClass) {
+		$plugin = null;
+
+		if (array_key_exists($aClass, $this->itemsByClass)) {
+			return $this->itemsByClass[$aClass];
+		}
+
+		else {
+			foreach ($this->getRegistrations() as $registration) {
+				if (($item = $this->get($registration['installationCode'])) && $item instanceof $aClass) {
+					if ($plugin) {
+						Env::getLogger()->warn("Could not retrieve plugin because multiple instances of " . $aClass . " are registered.");
+						break;
+					}
+
+					$plugin = $item;
+				}
+			}
+
+			$this->itemsByClass[$aClass] = $plugin;
+
+			return $plugin;
+		}
 	}
 
 	public function getRegistrations() {
