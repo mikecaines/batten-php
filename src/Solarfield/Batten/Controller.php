@@ -109,27 +109,20 @@ abstract class Controller implements ControllerInterface {
 		}
 
 		if ($finalError) {
-			try {
-				//if we've already attempted to recover from a boot loop error
-				if (self::$bootLoopRecoveryAttempted) {
-					//don't try to recover again, to avoid causing an infinite loop
-					throw new Exception(
-						"Unrecoverable boot loop error.",
-						0,
-						$finalError
-					);
-				}
-
-				//attempt to handle the error and recover
-				self::$bootLoopRecoveryAttempted = true;
-				$stubController->handleException($finalError);
-			}
-			catch (\Exception $ex) {
-				//if we get here, we couldn't even handle the exception, so it's game over man, game over...
-				static::bail($ex);
+			//if the boot loop was already recovered previously
+			if (self::$bootLoopRecoveryAttempted) {
+				//don't attempt to recover again, to avoid causing an infinite loop
+				throw new Exception(
+					"Unrecoverable boot loop error.",
+					0, $finalError
+				);
 			}
 
-			unset($stubController);
+			//flag that we are attempting to recover the boot loop
+			self::$bootLoopRecoveryAttempted = true;
+
+			//let the stub controller handle the exception
+			$stubController->handleException($finalError);
 		}
 
 		if (\App\DEBUG && Env::getVars()->get('debugMemUsage')) {
