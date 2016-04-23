@@ -9,12 +9,14 @@ class ViewPlugins {
 	private $items = [];
 	private $itemsByClass = [];
 
-	public function register($aComponentCode, $aInstallationCode, $aOptions = []) {
-		if (array_key_exists($aInstallationCode, $this->items)) {
-			$existingComponentCode = $this->items[$aInstallationCode]['componentCode'];
+	public function register($aComponentCode, $aInstallationCode = null, $aOptions = []) {
+		$installationCode = $aInstallationCode != null ? $aInstallationCode : lcfirst($aComponentCode);
+
+		if (array_key_exists($installationCode, $this->items)) {
+			$existingComponentCode = $this->items[$installationCode]['componentCode'];
 
 			throw new Exception(
-				"Cannot register '$aComponentCode' at '$aInstallationCode' because '$existingComponentCode' is already there."
+				"Cannot register '$aComponentCode' at '$installationCode' because '$existingComponentCode' is already there."
 			);
 		}
 
@@ -39,16 +41,16 @@ class ViewPlugins {
 					);
 				}
 
-				$plugin = new $component['className']($this->view, $aComponentCode, $aInstallationCode);
+				$plugin = new $component['className']($this->view, $aComponentCode, $installationCode);
 			}
 
-			$this->items[$aInstallationCode] = [
+			$this->items[$installationCode] = [
 				'plugin' => $plugin,
 				'componentCode' => $aComponentCode,
 			];
 		}
 
-		return $this->get($aInstallationCode);
+		return $this->get($installationCode);
 	}
 
 	/**
