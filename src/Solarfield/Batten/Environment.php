@@ -5,13 +5,20 @@ use ErrorException;
 use Exception;
 use Solarfield\Ok\MiscUtils;
 
-require_once __DIR__ . '/main.php';
 require_once \App\DEPENDENCIES_FILE_PATH . '/solarfield/ok-kit-php/src/Solarfield/Ok/MiscUtils.php';
 
 abstract class Environment {
 	static private $logger;
 	static private $standardOutput;
 	static private $vars;
+	static private $config;
+
+	/**
+	 * @return Config
+	 */
+	static public function getConfig() {
+		return self::$config;
+	}
 
 	static public function getBaseChain() {
 		return $chain = [
@@ -66,9 +73,6 @@ abstract class Environment {
 
 		$vars = static::getVars();
 
-		$vars->add('requestId', MiscUtils::guid());
-		$vars->add('appDependenciesFilePath', \App\DEPENDENCIES_FILE_PATH);
-
 
 		//validate app package file path
 
@@ -89,16 +93,29 @@ abstract class Environment {
 		$vars->add('appPackageFilePath', $path);
 
 
-		if (\App\DEBUG) {
-			$config = $aOptions['config'];
+		//include the config
+		require_once __DIR__ . '/Config.php';
+		$path = $vars->get('appPackageFilePath') . '/config.php';
+		/** @noinspection PhpIncludeInspection */
+		self::$config = new Config(file_exists($path) ? require_once $path : []);
 
-			$vars->add('debugComponentResolution', array_key_exists('debugComponentResolution', $config) ? (bool)$config['debugComponentResolution'] : false);
-			$vars->add('debugComponentLifetimes', array_key_exists('debugComponentLifetimes', $config) ? (bool)$config['debugComponentLifetimes'] : false);
-			$vars->add('debugMemUsage', array_key_exists('debugMemUsage', $config) ? (bool)$config['debugMemUsage'] : false);
-			$vars->add('debugPaths', array_key_exists('debugPaths', $config) ? (bool)$config['debugPaths'] : false);
-			$vars->add('debugRouting', array_key_exists('debugRouting', $config) ? (bool)$config['debugRouting'] : false);
-			$vars->add('debugReflection', array_key_exists('debugReflection', $config) ? (bool)$config['debugReflection'] : false);
-			$vars->add('debugClassAutoload', array_key_exists('debugClassAutoload', $config) ? (bool)$config['debugClassAutoload'] : false);
+		//define low level debug flag
+		if (!defined('App\DEBUG')) define('App\DEBUG', false);
+
+		$vars->add('requestId', MiscUtils::guid());
+		$vars->add('appDependenciesFilePath', \App\DEPENDENCIES_FILE_PATH);
+
+
+		if (\App\DEBUG) {
+			$config = static::getConfig();
+
+			$vars->add('debugComponentResolution', (bool)$config->get('debugComponentResolution'));
+			$vars->add('debugComponentLifetimes', (bool)$config->get('debugComponentLifetimes'));
+			$vars->add('debugMemUsage', (bool)$config->get('debugMemUsage'));
+			$vars->add('debugPaths', (bool)$config->get('debugPaths'));
+			$vars->add('debugRouting', (bool)$config->get('debugRouting'));
+			$vars->add('debugReflection', (bool)$config->get('debugReflection'));
+			$vars->add('debugClassAutoload', (bool)$config->get('debugClassAutoload'));
 		}
 	}
 }
