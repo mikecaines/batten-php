@@ -343,7 +343,7 @@ abstract class Controller implements ControllerInterface {
 	}
 
 	public function handleException(\Exception $aEx) {
-		Env::getLogger()->error('Encountered exception.', ['exception'=>$aEx]);
+		Env::getLogger()->error((string)$aEx, ['exception'=>$aEx]);
 	}
 
 	public function getDefaultViewType() {
