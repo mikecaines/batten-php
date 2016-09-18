@@ -5,8 +5,6 @@ use ErrorException;
 use Exception;
 use Solarfield\Ok\MiscUtils;
 
-require_once \App\DEPENDENCIES_FILE_PATH . '/solarfield/ok-kit-php/src/Solarfield/Ok/MiscUtils.php';
-
 abstract class Environment {
 	static private $logger;
 	static private $standardOutput;
@@ -71,6 +69,8 @@ abstract class Environment {
 			throw new ErrorException($aMessage, 0, $aNumber, $aFile, $aLine);
 		});
 
+		error_reporting(E_ALL | E_STRICT);
+
 		$vars = static::getVars();
 
 
@@ -101,9 +101,6 @@ abstract class Environment {
 
 		//define low level debug flag
 		if (!defined('App\DEBUG')) define('App\DEBUG', false);
-
-		$vars->add('requestId', MiscUtils::guid());
-		$vars->add('appDependenciesFilePath', \App\DEPENDENCIES_FILE_PATH);
 
 
 		if (\App\DEBUG) {
