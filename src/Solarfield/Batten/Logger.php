@@ -6,7 +6,7 @@ use Solarfield\Ok\MiscUtils;
 
 class Logger implements LoggerInterface {
 	protected function processEntry($aMessage, $aContext = null, $aType) {
-		$output = '[request=' . Env::getVars()->get('requestId') . ']';
+		$output = '';
 
 		switch ($aType) {
 			case \Solarfield\Batten\LOG_LEVEL_INFO: $typeName = 'INFO'; break;
@@ -15,20 +15,12 @@ class Logger implements LoggerInterface {
 			case \Solarfield\Batten\LOG_LEVEL_DEBUG: $typeName = 'DEBUG'; break;
 			default: $typeName = 'OTHER';
 		}
-		$output .= ' [type=' . $typeName . ']';
+		$output .= '[type=' . $typeName . ']';
 
-		$output .= ': ' . $aMessage;
+		$output .= ' ' . $aMessage;
 
 		if ($aContext !== null) {
-			$output .= "\n";
-
-			if (is_object($aContext) && method_exists($aContext, '__toString')) {
-				$output .= (string)$aContext;
-			}
-
-			else {
-				$output .= MiscUtils::varInfo($aContext);
-			}
+			$output .= "\n\n[context] " . MiscUtils::varInfo($aContext);
 		}
 
 		error_log($output);
