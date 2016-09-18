@@ -97,7 +97,7 @@ abstract class Environment {
 		require_once __DIR__ . '/Config.php';
 		$path = $vars->get('appPackageFilePath') . '/config.php';
 		/** @noinspection PhpIncludeInspection */
-		self::$config = new Config(file_exists($path) ? require_once $path : []);
+		self::$config = new Config(file_exists($path) ? MiscUtils::extractInclude($path) : []);
 
 		//define low level debug flag
 		if (!defined('App\DEBUG')) define('App\DEBUG', false);
