@@ -319,11 +319,11 @@ abstract class Controller implements ControllerInterface {
 			$view->setController($this->getProxy());
 			$view->init();
 
-			$hintedInput = $view->getHintedInput();
-			if ($hintedInput) {
-				$this->getInput()->mergeReverse($hintedInput);
+			$input = $view->getInput();
+			if ($input) {
+				$this->getInput()->mergeReverse($input);
 			}
-			unset($hintedInput);
+			unset($input);
 
 			$hints = $view->getHints();
 			if ($hints) {

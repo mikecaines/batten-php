@@ -27,7 +27,7 @@ abstract class View implements ViewInterface {
 
 	}
 
-	protected function resolveHintedInput() {
+	protected function resolveInput() {
 
 	}
 
@@ -67,7 +67,7 @@ abstract class View implements ViewInterface {
 		return $this->model;
 	}
 
-	public function getHintedInput() {
+	public function getInput() {
 		if (!$this->input) {
 			if ($this->getController()) {
 				$this->input = $this->getController()->createInput();
@@ -104,7 +104,7 @@ abstract class View implements ViewInterface {
 
 		$this->resolvePlugins();
 		$this->resolveOptions();
-		$this->resolveHintedInput();
+		$this->resolveInput();
 		$this->resolveHints();
 	}
 

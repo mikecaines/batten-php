@@ -14,7 +14,7 @@ interface ViewInterface {
 	/**
 	 * @return InputInterface
 	 */
-	public function getHintedInput();
+	public function getInput();
 
 	/**
 	 * @return HintsInterface
