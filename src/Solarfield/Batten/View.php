@@ -19,7 +19,7 @@ abstract class View implements ViewInterface {
 
 	protected function resolvePlugins() {
 		foreach ($this->getController()->getPlugins()->getRegistrations() as $registration) {
-			$this->getPlugins()->register($registration['componentCode'], $registration['installationCode']);
+			$this->getPlugins()->register($registration['componentCode']);
 		}
 	}
 

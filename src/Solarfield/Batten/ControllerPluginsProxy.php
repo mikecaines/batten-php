@@ -11,19 +11,19 @@ class ControllerPluginsProxy {
 		return $this->plugins;
 	}
 
-	public function get($aInstallationCode) {
+	public function get($aComponentCode) {
 		$proxy = null;
 
-		if (array_key_exists($aInstallationCode, $this->proxies)) {
-			$proxy = $this->proxies[$aInstallationCode];
+		if (array_key_exists($aComponentCode, $this->proxies)) {
+			$proxy = $this->proxies[$aComponentCode];
 		}
 
 		else {
-			$plugin = $this->getActualPlugins()->get($aInstallationCode);
+			$plugin = $this->getActualPlugins()->get($aComponentCode);
 
 			if ($plugin) {
 				$proxy = $plugin->getProxy();
-				$this->proxies[$aInstallationCode] = $proxy;
+				$this->proxies[$aComponentCode] = $proxy;
 			}
 		}
 

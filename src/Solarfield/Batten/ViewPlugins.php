@@ -9,14 +9,10 @@ class ViewPlugins {
 	private $items = [];
 	private $itemsByClass = [];
 
-	public function register($aComponentCode, $aInstallationCode = null, $aOptions = []) {
-		$installationCode = $aInstallationCode != null ? $aInstallationCode : lcfirst($aComponentCode);
-
-		if (array_key_exists($installationCode, $this->items)) {
-			$existingComponentCode = $this->items[$installationCode]['componentCode'];
-
+	public function register($aComponentCode) {
+		if (array_key_exists($aComponentCode, $this->items)) {
 			throw new Exception(
-				"Cannot register '$aComponentCode' at '$installationCode' because '$existingComponentCode' is already there."
+				"Plugin '$aComponentCode' is already registered."
 			);
 		}
 
@@ -41,26 +37,26 @@ class ViewPlugins {
 					);
 				}
 
-				$plugin = new $component['className']($this->view, $aComponentCode, $installationCode);
+				$plugin = new $component['className']($this->view, $aComponentCode);
 			}
 
-			$this->items[$installationCode] = [
+			$this->items[$aComponentCode] = [
 				'plugin' => $plugin,
 				'componentCode' => $aComponentCode,
 			];
 		}
 
-		return $this->get($installationCode);
+		return $this->get($aComponentCode);
 	}
 
 	/**
-	 * @param string $aInstallationCode
+	 * @param string $aComponentCode
 	 * @return ViewPlugin|null
 	 * @throws Exception
 	 */
-	public function get($aInstallationCode) {
-		if (array_key_exists($aInstallationCode, $this->items) && $this->items[$aInstallationCode]['plugin']) {
-			return $this->items[$aInstallationCode]['plugin'];
+	public function get($aComponentCode) {
+		if (array_key_exists($aComponentCode, $this->items) && $this->items[$aComponentCode]['plugin']) {
+			return $this->items[$aComponentCode]['plugin'];
 		}
 
 		return null;
@@ -75,7 +71,7 @@ class ViewPlugins {
 
 		else {
 			foreach ($this->getRegistrations() as $registration) {
-				if (($item = $this->get($registration['installationCode'])) && $item instanceof $aClass) {
+				if (($item = $this->get($registration['componentCode'])) && $item instanceof $aClass) {
 					if ($plugin) {
 						Env::getLogger()->warn("Could not retrieve plugin because multiple instances of " . $aClass . " are registered.");
 						break;
@@ -97,7 +93,6 @@ class ViewPlugins {
 		foreach ($this->items as $k => $item) {
 			$registrations[] = [
 				'componentCode' => $item['componentCode'],
-				'installationCode' => $k,
 			];
 		}
 
