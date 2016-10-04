@@ -30,6 +30,16 @@ class ControllerPluginsProxy {
 		return $proxy;
 	}
 
+	/**
+	 * Gets the plugin by the plugin class (not the plugin proxy class).
+	 * @param string $aClass
+	 * @return null|ControllerPluginProxy
+	 */
+	public function getByClass($aClass) {
+		$plugin = $this->getActualPlugins()->getByClass($aClass);
+		return $plugin ? $plugin->getProxy() : null;
+	}
+
 	public function getRegistrations() {
 		return $this->plugins->getRegistrations();
 	}
