@@ -1,7 +1,7 @@
 <?php
 namespace Solarfield\Batten;
 
-abstract class ControllerPluginProxy {
+class ControllerPluginProxy {
 	private $plugin;
 
 	protected function getActualPlugin() {

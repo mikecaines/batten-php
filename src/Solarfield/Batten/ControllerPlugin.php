@@ -8,6 +8,7 @@ abstract class ControllerPlugin {
 
 	private $controller;
 	private $componentCode;
+	private $proxy;
 
 	/**
 	 * @return ControllerInterface
@@ -24,7 +25,11 @@ abstract class ControllerPlugin {
 	 * @return ControllerPluginProxy|null
 	 */
 	public function getProxy() {
-		return null;
+		if (!$this->proxy) {
+			$this->proxy = new ControllerPluginProxy($this);
+		}
+
+		return $this->proxy;
 	}
 
 	public function __construct(ControllerInterface $aController, $aComponentCode) {
