@@ -71,7 +71,15 @@ abstract class Controller implements ControllerInterface {
 
 	static public function boot($aInfo = []) {
 		if (\App\DEBUG && Env::getVars()->get('debugMemUsage')) {
-			Env::getLogger()->debug('mem[boot begin]: ' . ceil(memory_get_usage()/1024) . 'K');
+			$bytesUsed = memory_get_usage();
+			$bytesLimit = ini_get('memory_limit');
+
+			Env::getLogger()->debug(
+				'mem[boot begin]: ' . ceil($bytesUsed/1024) . 'K/' . $bytesLimit
+				. ' ' . round($bytesUsed/\Solarfield\Ok\PhpUtils::parseShorthandBytes($bytesLimit)*100, 2) . '%'
+			);
+
+			unset($bytesUsed, $bytesLimit);
 		}
 
 		if (\App\DEBUG && Env::getVars()->get('debugPaths')) {
@@ -127,10 +135,31 @@ abstract class Controller implements ControllerInterface {
 		}
 
 		if (\App\DEBUG && Env::getVars()->get('debugMemUsage')) {
-			Env::getLogger()->debug('mem[boot end]: ' . ceil(memory_get_usage()/1024) . 'K');
-			Env::getLogger()->debug('mem-peak[boot end]: ' . ceil(memory_get_peak_usage()/1024) . 'K');
+			$bytesUsed = memory_get_usage();
+			$bytesPeak = memory_get_peak_usage();
+			$bytesLimit = ini_get('memory_limit');
 
-			Env::getLogger()->debug('realpath-cache-size[boot end]: ' . (ceil(realpath_cache_size()/1024)) . 'K/' . ini_get('realpath_cache_size'));
+			Env::getLogger()->debug(
+				'mem[boot end]: ' . ceil($bytesUsed/1024) . 'K/' . $bytesLimit
+				. ' ' . round($bytesUsed/\Solarfield\Ok\PhpUtils::parseShorthandBytes($bytesLimit)*100, 2) . '%'
+			);
+
+			Env::getLogger()->debug(
+				'mem-peak[boot end]: ' . ceil($bytesPeak/1024) . 'K/' . $bytesLimit
+				. ' ' . round($bytesPeak/\Solarfield\Ok\PhpUtils::parseShorthandBytes($bytesLimit)*100, 2) . '%'
+			);
+
+			unset($bytesUsed, $bytesPeak, $bytesLimit);
+
+			$bytesUsed = realpath_cache_size();
+			$bytesLimit = ini_get('realpath_cache_size');
+
+			Env::getLogger()->debug(
+				'realpath-cache-size[boot end]: ' . (ceil($bytesUsed/1024)) . 'K/' . $bytesLimit
+				. ' ' . round($bytesUsed/\Solarfield\Ok\PhpUtils::parseShorthandBytes($bytesLimit)*100, 2) . '%'
+			);
+
+			unset($bytesUsed, $bytesLimit);
 		}
 
 		return $finalController;
