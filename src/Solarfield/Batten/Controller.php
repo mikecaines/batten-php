@@ -117,7 +117,7 @@ abstract class Controller implements ControllerInterface {
 			$finalError = new UnresolvedRouteException(
 				$message, 0, null,
 				[
-					'iterations' => self::$bootPath
+					'iterations' => array_values(self::$bootPath),
 				]
 			);
 
