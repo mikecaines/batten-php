@@ -110,11 +110,18 @@ abstract class Controller implements ControllerInterface {
 		//if we couldn't route, but we didn't encounter an exception
 		if (!$finalController && !$finalError) {
 			//imply a 'could not route' error
+
+			$t = $info['nextRoute'];
+			$message = "Could not route: " . (is_scalar($t) ? "'$t'" : MiscUtils::varInfo($t)) . ".";
+
 			$finalError = new UnresolvedRouteException(
-				"Could not route: '" . $info['nextRoute'] . "'."
-				. "\nInitial route was: " . MiscUtils::varInfo(static::getInitialRoute())
-				. "\nIterations were: " . MiscUtils::varInfo(array_values(self::$bootPath))
+				$message, 0, null,
+				[
+					'iterations' => self::$bootPath
+				]
 			);
+
+			unset($t, $message);
 		}
 
 		if ($finalError) {
