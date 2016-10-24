@@ -7,14 +7,7 @@
 		}
 	},
 
-	"repositories": [
-		{
-			"type": "vcs",
-			"url": "https://github.com/solarfield/ok-kit-php.git"
-		}
-	],
-
 	"require": {
-			"solarfield/ok-kit-php": "dev-master"
+			"solarfield/ok-kit-php": "^0.0"
 	}
 }
