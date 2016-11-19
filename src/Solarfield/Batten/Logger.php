@@ -1,7 +1,7 @@
 <?php
 namespace Solarfield\Batten;
 
-use App\Environment as Env;
+
 use Solarfield\Ok\MiscUtils;
 
 class Logger implements LoggerInterface {
