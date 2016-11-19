@@ -6,7 +6,7 @@ abstract class ViewPlugin {
 	private $componentCode;
 
 	/**
-	 * @return \Solarfield\Batten\View
+	 * @return \Solarfield\Batten\ViewInterface
 	 */
 	public function getView() {
 		return $this->view;
