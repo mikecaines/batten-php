@@ -344,7 +344,7 @@ abstract class Controller implements ControllerInterface {
 	}
 
 	public function processRoute($aInfo) {
-		return null;
+		return $aInfo;
 	}
 
 	public function connect() {
