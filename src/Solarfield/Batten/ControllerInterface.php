@@ -50,7 +50,7 @@ interface ControllerInterface {
 
 	public function runRender();
 
-	public function handleException(\Exception $aEx);
+	public function handleException(\Throwable $aEx);
 
 	/**
 	 * @return string|null

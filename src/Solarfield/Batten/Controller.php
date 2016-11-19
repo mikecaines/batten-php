@@ -5,6 +5,7 @@ use App\Environment as Env;
 use Exception;
 use Solarfield\Ok\EventTargetTrait;
 use Solarfield\Ok\MiscUtils;
+use Throwable;
 
 abstract class Controller implements ControllerInterface {
 	use EventTargetTrait;
@@ -103,7 +104,7 @@ abstract class Controller implements ControllerInterface {
 		try {
 			$finalController = $stubController->resolveController($info);
 		}
-		catch (\Exception $ex) {
+		catch (Throwable $ex) {
 			$finalError = $ex;
 		}
 
@@ -172,7 +173,7 @@ abstract class Controller implements ControllerInterface {
 		return $finalController;
 	}
 
-	static public function bail(Exception $aEx) {
+	static public function bail(Throwable $aEx) {
 		Env::getLogger()->error("Bailed.", ['exception'=>$aEx]);
 	}
 
@@ -378,7 +379,7 @@ abstract class Controller implements ControllerInterface {
 		$this->runRender();
 	}
 
-	public function handleException(\Exception $aEx) {
+	public function handleException(Throwable $aEx) {
 		Env::getLogger()->error((string)$aEx, ['exception'=>$aEx]);
 	}
 
