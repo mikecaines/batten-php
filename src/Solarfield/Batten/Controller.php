@@ -227,7 +227,7 @@ abstract class Controller implements ControllerInterface {
 				//reset the boot info for the next iteration
 				$tempInfo = [
 					'moduleCode' => array_key_exists('moduleCode', $tempInfo) ? $tempInfo['moduleCode'] : '',
-					'nextRoute' => array_key_exists('nextRoute', $tempInfo) ? $tempInfo['nextRoute'] : '',
+					'nextRoute' => array_key_exists('nextRoute', $tempInfo) ? $tempInfo['nextRoute'] : null,
 					'controllerOptions' => array_key_exists('controllerOptions', $tempInfo) ? $tempInfo['controllerOptions'] : [],
 				];
 
@@ -241,7 +241,7 @@ abstract class Controller implements ControllerInterface {
 				//if we don't have a temp controller yet,
 				//or the temp controller is not the target controller (comparing by module code)
 				//or we still have routing to do
-				if ($tempController == null || $tempInfo['moduleCode'] != $tempController->getCode() || $tempInfo['nextRoute'] != null) {
+				if ($tempController == null || $tempInfo['moduleCode'] != $tempController->getCode() || $tempInfo['nextRoute'] !== null) {
 					//if the current iteration has not been encountered before
 					if (!array_key_exists($tempIteration, self::$bootPath)) {
 						//append the current iteration to the boot path
