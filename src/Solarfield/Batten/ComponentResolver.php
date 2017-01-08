@@ -6,13 +6,12 @@ use Solarfield\Ok\MiscUtils;
 
 class ComponentResolver {
 	public function resolveComponent($aChain, $aClassNamePart, $aViewTypeCode = null, $aPluginCode = null) {
-		$chain = $aChain;
-		$chain = array_reverse($chain, true);
-
+		$chain = array_reverse($aChain);
 		$component = null;
 
 		foreach ($chain as $link) {
 			$link = array_replace([
+				'id' => null,
 				'namespace' => null,
 				'path' => null,
 				'pluginsSubNamespace' => '\\Plugins',

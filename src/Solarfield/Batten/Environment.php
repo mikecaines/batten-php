@@ -20,12 +20,14 @@ abstract class Environment {
 
 	static public function getBaseChain() {
 		return $chain = [
-			'solarfield/batten-php' => [
+			[
+				'id' => 'solarfield/batten-php',
 				'namespace' => __NAMESPACE__,
 				'path' => __DIR__,
 			],
 
-			'app' => [
+			[
+				'id' => 'app',
 				'namespace' => 'App',
 				'path' => static::getVars()->get('appPackageFilePath') . '/App',
 			],
