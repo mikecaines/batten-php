@@ -55,7 +55,6 @@ abstract class Controller implements ControllerInterface {
 			$chain['module'] = [
 				'namespace' => 'App\\Modules\\' . $moduleNamespace,
 				'path' => Env::getVars()->get('appPackageFilePath') . '/App/Modules/' . $moduleDir,
-				'exposeToClient' => true,
 			];
 		}
 

@@ -28,7 +28,6 @@ abstract class Environment {
 			'app' => [
 				'namespace' => 'App',
 				'path' => static::getVars()->get('appPackageFilePath') . '/App',
-				'exposeToClient' => true,
 			],
 		];
 	}
