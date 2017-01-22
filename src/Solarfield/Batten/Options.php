@@ -2,9 +2,11 @@
 namespace Solarfield\Batten;
 
 use Exception;
-use Solarfield\Ok\ToArrayInterface;
 
-class Options implements ToArrayInterface {
+class Options implements
+	\Solarfield\Ok\ToArrayInterface,
+	\IteratorAggregate
+{
 	private $data = [];
 	private $readOnly;
 
@@ -47,7 +49,11 @@ class Options implements ToArrayInterface {
 	public function toArray() {
 		return $this->data;
 	}
-
+	
+	public function getIterator() {
+		return new \ArrayIterator($this->data);
+	}
+	
 	function __construct($aOptions = []) {
 		$this->readOnly = array_key_exists('readOnly', $aOptions) ? (bool)$aOptions['readOnly'] : false;
 	}
