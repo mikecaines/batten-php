@@ -27,4 +27,10 @@ interface InputInterface extends ToArrayInterface {
 	 * @return array
 	 */
 	public function getAsArray($aPath);
+	
+	/**
+	 * @param $aPath
+	 * @return bool
+	 */
+	public function has($aPath);
 }
