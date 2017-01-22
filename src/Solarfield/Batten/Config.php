@@ -1,11 +1,17 @@
 <?php
 namespace Solarfield\Batten;
 
+use Solarfield\Ok\StructUtils;
+
 class Config {
 	private $data;
 
 	public function get($aName) {
 		return array_key_exists($aName, $this->data) ? $this->data[$aName] : null;
+	}
+	
+	public function has($aPath): bool {
+		return StructUtils::scout($this->data, $aPath)[0];
 	}
 
 	public function __construct(array $aData) {
