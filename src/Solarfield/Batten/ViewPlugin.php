@@ -1,7 +1,11 @@
 <?php
 namespace Solarfield\Batten;
 
+use Solarfield\Ok\EventTargetTrait;
+
 abstract class ViewPlugin {
+	use EventTargetTrait;
+	
 	private $view;
 	private $componentCode;
 
