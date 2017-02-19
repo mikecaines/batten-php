@@ -68,13 +68,18 @@ abstract class Environment {
 	static public function init($aOptions) {
 		$options = array_replace([
 			'appPackageFilePath' => null,
+			'errorReporting' => E_ALL,
 		], $aOptions);
 		
 		set_error_handler(function ($aNumber, $aMessage, $aFile, $aLine) {
 			throw new ErrorException($aMessage, 0, $aNumber, $aFile, $aLine);
 		});
 
-		error_reporting(E_ALL | E_STRICT);
+		error_reporting($options['errorReporting']);
+		
+		if (PHP_VERSION_ID < 70000) throw new Exception(
+			"PHP version 7 or higher is required."
+		);
 
 		$vars = static::getVars();
 
