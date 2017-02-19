@@ -66,6 +66,10 @@ abstract class Environment {
 	}
 
 	static public function init($aOptions) {
+		$options = array_replace([
+			'appPackageFilePath' => null,
+		], $aOptions);
+		
 		set_error_handler(function ($aNumber, $aMessage, $aFile, $aLine) {
 			throw new ErrorException($aMessage, 0, $aNumber, $aFile, $aLine);
 		});
@@ -77,17 +81,15 @@ abstract class Environment {
 
 		//validate app package file path
 
-		if (!array_key_exists('appPackageFilePath', $aOptions)) {
-			throw new Exception(
-				"The appPackageFilePath option must be specified when calling " . __METHOD__ . "."
-			);
-		}
+		if (!$options['appPackageFilePath']) throw new Exception(
+			"The appPackageFilePath option must be specified when calling " . __METHOD__ . "."
+		);
 
-		$path = realpath($aOptions['appPackageFilePath']);
+		$path = realpath($options['appPackageFilePath']);
 
 		if (!$path) {
 			throw new Exception(
-				"Invalid appPackageFilePath: '" . $aOptions['appPackageFilePath'] . "'."
+				"Invalid appPackageFilePath: '" . $options['appPackageFilePath'] . "'."
 			);
 		}
 
