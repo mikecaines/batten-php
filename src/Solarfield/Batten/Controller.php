@@ -70,7 +70,7 @@ abstract class Controller implements ControllerInterface {
 		return self::$componentResolver;
 	}
 
-	static public function boot($aInfo = []) {
+	static public function boot($aInfo = null) {
 		if (\App\DEBUG && Env::getVars()->get('debugMemUsage')) {
 			$bytesUsed = memory_get_usage();
 			$bytesLimit = ini_get('memory_limit');
@@ -90,7 +90,7 @@ abstract class Controller implements ControllerInterface {
 
 		//default some expected boot info
 		//Any additional data will be kept and passed to resolveController()
-		$info = $aInfo;
+		$info = $aInfo?:[];
 		if (!array_key_exists('moduleCode', $info)) $info['moduleCode'] = '';
 		if (!array_key_exists('nextRoute', $info)) $info['nextRoute'] = static::getInitialRoute();
 		if (!array_key_exists('controllerOptions', $info)) $info['controllerOptions'] = [];
