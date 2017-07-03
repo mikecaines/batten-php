@@ -211,6 +211,9 @@ abstract class Controller implements ControllerInterface {
 
 		$input = $this->createInput();
 		$input->importFromGlobals();
+		if ($aInfo && array_key_exists('input', $aInfo)) {
+			$input->merge($aInfo['input']);
+		}
 
 		$hints = $this->createHints();
 		if ($aInfo && array_key_exists('hints', $aInfo)) {
