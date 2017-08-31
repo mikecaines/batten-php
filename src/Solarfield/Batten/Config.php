@@ -3,7 +3,7 @@ namespace Solarfield\Batten;
 
 use Solarfield\Ok\StructUtils;
 
-class Config {
+class Config implements \IteratorAggregate {
 	private $data;
 
 	public function get($aName) {
@@ -16,5 +16,9 @@ class Config {
 
 	public function __construct(array $aData) {
 		$this->data = $aData;
+	}
+	
+	public function getIterator() {
+		return new \ArrayIterator($this->data);
 	}
 }
