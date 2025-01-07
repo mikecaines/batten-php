@@ -68,12 +68,17 @@ abstract class Environment {
 	static public function init($aOptions) {
 		$options = array_replace([
 			'appPackageFilePath' => null,
+
+			// the error level used by error_reporting()
 			'errorReporting' => E_ALL,
+
+			// the error level used by set_error_handler()
+			'errorHandling' => E_ALL & ~E_DEPRECATED,
 		], $aOptions);
-		
+
 		set_error_handler(function ($aNumber, $aMessage, $aFile, $aLine) {
 			throw new ErrorException($aMessage, 0, $aNumber, $aFile, $aLine);
-		});
+		}, $options['errorHandling']);
 
 		error_reporting($options['errorReporting']);
 		
