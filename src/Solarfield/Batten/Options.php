@@ -50,7 +50,7 @@ class Options implements
 		return $this->data;
 	}
 	
-	public function getIterator() {
+	public function getIterator(): \Traversable {
 		return new \ArrayIterator($this->data);
 	}
 	

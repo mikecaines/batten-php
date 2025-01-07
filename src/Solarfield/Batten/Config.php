@@ -18,7 +18,7 @@ class Config implements \IteratorAggregate {
 		$this->data = $aData;
 	}
 	
-	public function getIterator() {
+	public function getIterator(): \Traversable {
 		return new \ArrayIterator($this->data);
 	}
 }
